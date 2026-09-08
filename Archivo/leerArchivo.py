@@ -1,7 +1,8 @@
 import pandas as pd
 
+
 class LeerArchivo:
-    def __init__(self, archivo="Alta_de_Proyectos.xlsx"):
+    def __init__(self, archivo="Alta de Proyectos.xlsx"):
         self.archivo = archivo
         self.excel = pd.ExcelFile(archivo)
     
@@ -383,3 +384,4 @@ per = archivo.leer_Personas()
 lug = archivo.leer_Lugares()
 mat = archivo.leer_Materiales()
 archivo.mostrar_datos(alt, per, lug, mat)
+
