@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-# from streamlit_gsheets import GSheetsConnection # Lo usaremos cuando vayas a guardar
 
 # ==========================================
 # CONFIGURACIÓN DE PÁGINA STREAMLIT
@@ -150,24 +149,20 @@ def mostrar_login():
         submit = st.form_submit_button("Entrar")
         
         if submit:
-            # INTEGRACIÓN DE ST.SECRETS
-            # Comprobamos si existen secretos configurados
-            if "credenciales" in st.secrets:
-                usuario_correcto = st.secrets["credenciales"]["usuario_admin"]
-                password_correcto = st.secrets["credenciales"]["password_admin"]
+            # Validar credenciales desde st.secrets
+            if "usuarios" in st.secrets:
+                diccionario_usuarios = st.secrets["usuarios"]
+                
+                # Verificar si el usuario existe y si la contraseña coincide
+                if usuario in diccionario_usuarios and password == diccionario_usuarios[usuario]:
+                    st.session_state["logeado"] = True
+                    st.session_state["usuario_actual"] = usuario
+                    st.success(f"¡Bienvenido, {usuario}!")
+                    st.rerun()
+                else:
+                    st.error("Usuario o contraseña incorrectos.")
             else:
-                # Si no hay secretos (por ejemplo, trabajando localmente), usamos datos de prueba
-                usuario_correcto = "prueba"
-                password_correcto = "123"
-                st.warning("⚠️ Configuración de 'secrets' no encontrada. Se está usando el usuario/contraseña de prueba.")
-
-            # Verificación de datos
-            if usuario == usuario_correcto and password == password_correcto:
-                st.session_state["logeado"] = True
-                st.success("Inicio de sesión exitoso. Cargando...")
-                st.rerun()
-            else:
-                st.error("Usuario o contraseña incorrectos.")
+                st.error("⚠️ No se encontró la configuración de usuarios ('secrets.toml'). Por favor configúrala.")
 
 def mostrar_altpro():
     st.title("📂 AltPro - Carga de Proyectos")
@@ -243,16 +238,20 @@ def main():
     else:
         st.sidebar.image("https://cdn-icons-png.flaticon.com/512/1055/1055664.png", width=100)
         st.sidebar.title("Menú Principal")
+        st.sidebar.write(f"👤 **Usuario:** {st.session_state.get('usuario_actual', '')}")
+        st.sidebar.divider()
+        
         opcion = st.sidebar.radio("Navegación:", ["🏠 Inicio", "📂 AltPro"])
         
         st.sidebar.divider()
         if st.sidebar.button("🚪 Cerrar Sesión"):
             st.session_state["logeado"] = False
+            st.session_state["usuario_actual"] = None
             st.rerun()
 
         if opcion == "🏠 Inicio":
             st.title("Bienvenido al Sistema")
-            st.write("Selecciona **AltPro** en el menú de la izquierda para comenzar a subir proyectos.")
+            st.write(f"Hola **{st.session_state.get('usuario_actual', '')}**. Selecciona **AltPro** en el menú de la izquierda para comenzar a subir proyectos.")
         
         elif opcion == "📂 AltPro":
             mostrar_altpro()
