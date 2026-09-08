@@ -8,16 +8,13 @@ import pandas as pd
 st.set_page_config(page_title="Alta de Proyectos", layout="wide", initial_sidebar_state="expanded")
 
 # ==========================================
-# CLASE DE LECTURA (Corregida sin caché problemático)
+# CLASE DE LECTURA 
 # ==========================================
 class LectorProyectosExcel:
     def __init__(self, archivo_subido):
-        # Leemos el archivo excel subido a la memoria
         self.archivo = archivo_subido
     
-    # ⚠️ ELIMINAMOS @st.cache_data para que SIEMPRE lea el archivo nuevo
     def _leer_pestana(self, nombre_pestana):
-        # Lee la pestaña del Excel sin encabezados
         return pd.read_excel(self.archivo, sheet_name=nombre_pestana, header=None)
 
     def leer_Alta_de_Proyecto(self):
@@ -53,7 +50,6 @@ class LectorProyectosExcel:
         materiales_lugar, solicitados_lugar, comentarios_lugar = [], [], []
         materiales_planta, observaciones_planta, lugar_planta, solicitados_planta, comentarios_planta = [], [], [], [], []
                 
-        # --- FUNCIÓN AUXILIAR PARA CORREGIR EL ERROR DE LONGITUD ---
         def procesar_lugar(rango_inicio, rango_fin):
             for fila in range(rango_inicio, rango_fin):
                 materiales_lugar.append(df.iloc[fila, 0] if pd.notna(df.iloc[fila, 0]) else "")
@@ -154,13 +150,24 @@ def mostrar_login():
         submit = st.form_submit_button("Entrar")
         
         if submit:
-            # Cuenta de prueba
-            if usuario == "prueba" and password == "123":
+            # INTEGRACIÓN DE ST.SECRETS
+            # Comprobamos si existen secretos configurados
+            if "credenciales" in st.secrets:
+                usuario_correcto = st.secrets["credenciales"]["usuario_admin"]
+                password_correcto = st.secrets["credenciales"]["password_admin"]
+            else:
+                # Si no hay secretos (por ejemplo, trabajando localmente), usamos datos de prueba
+                usuario_correcto = "prueba"
+                password_correcto = "123"
+                st.warning("⚠️ Configuración de 'secrets' no encontrada. Se está usando el usuario/contraseña de prueba.")
+
+            # Verificación de datos
+            if usuario == usuario_correcto and password == password_correcto:
                 st.session_state["logeado"] = True
                 st.success("Inicio de sesión exitoso. Cargando...")
                 st.rerun()
             else:
-                st.error("Usuario o contraseña incorrectos. (Pista: prueba / 123)")
+                st.error("Usuario o contraseña incorrectos.")
 
 def mostrar_altpro():
     st.title("📂 AltPro - Carga de Proyectos")
@@ -172,16 +179,13 @@ def mostrar_altpro():
         st.success("Archivo cargado correctamente. Procesando datos...")
         
         try:
-            # Instanciar el lector con el archivo subido
             lector = LectorProyectosExcel(archivo_subido)
             
-            # Extraer datos
             alt = lector.leer_Alta_de_Proyecto()
             df_personas = lector.leer_Personas()
             lugares_data = lector.leer_Lugares()
             df_materiales = lector.leer_Materiales()
 
-            # Mostrar Pestañas
             tab1, tab2, tab3, tab4 = st.tabs(["Información General", "Personas Involucradas", "Lugares Registrados", "Materiales de Bodega"])
 
             with tab1:
@@ -217,7 +221,6 @@ def mostrar_altpro():
                 st.subheader("Materiales y Equipos")
                 st.dataframe(df_materiales, use_container_width=True)
                 
-            # Botón de Aprobación
             st.divider()
             st.markdown("### ¿La información es correcta?")
             if st.button("✅ Aprobar y Guardar en Base de Datos", use_container_width=True):
@@ -226,21 +229,19 @@ def mostrar_altpro():
 
         except Exception as e:
             st.error(f"Error al leer el documento: {e}")
-            st.info("Asegúrate de que el archivo tenga el formato y las pestañas correctas ('Alta de proyecto', 'PERSONAS', 'LUGARES', 'MATERIAL ').")
+            st.info("Asegúrate de que el archivo tenga el formato y las pestañas correctas.")
 
 # ==========================================
 # FLUJO PRINCIPAL DE LA APP
 # ==========================================
 def main():
-    # Inicializar variable de estado para el login
     if "logeado" not in st.session_state:
         st.session_state["logeado"] = False
 
     if not st.session_state["logeado"]:
         mostrar_login()
     else:
-        # Menú Lateral (Sidebar)
-        st.sidebar.image("https://cdn-icons-png.flaticon.com/512/1055/1055664.png", width=100) # Logo genérico
+        st.sidebar.image("https://cdn-icons-png.flaticon.com/512/1055/1055664.png", width=100)
         st.sidebar.title("Menú Principal")
         opcion = st.sidebar.radio("Navegación:", ["🏠 Inicio", "📂 AltPro"])
         
@@ -249,7 +250,6 @@ def main():
             st.session_state["logeado"] = False
             st.rerun()
 
-        # Rutas de navegación
         if opcion == "🏠 Inicio":
             st.title("Bienvenido al Sistema")
             st.write("Selecciona **AltPro** en el menú de la izquierda para comenzar a subir proyectos.")
