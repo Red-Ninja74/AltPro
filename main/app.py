@@ -259,6 +259,9 @@ def main():
         
         elif opcion == "📂 AltPro":
             mostrar_altpro()
+            
+        elif opcion == "📊 Estadísticas":
+            mostrar_estadisticas()
 
 if __name__ == "__main__":
     main()
