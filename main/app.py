@@ -140,7 +140,7 @@ class LectorProyectosExcel:
 # FUNCIONES DE INTERFAZ
 # ==========================================
 def mostrar_login():
-    st.title("🔐 Iniciar Sesión")
+    st.title("Iniciar Sesión")
     st.markdown("Por favor, ingresa tus credenciales para acceder al sistema.")
     
     with st.form("login_form"):
@@ -165,7 +165,7 @@ def mostrar_login():
                 st.error("⚠️ No se encontró la configuración de usuarios ('secrets.toml'). Por favor configúrala.")
 
 def mostrar_altpro():
-    st.title("📂 AltPro - Carga de Proyectos")
+    st.title("AltPro - Carga de Proyectos")
     st.markdown("Sube el archivo **Excel (.xlsx)** del proyecto para leerlo y aprobarlo.")
 
     archivo_subido = st.file_uploader("Arrastra aquí el archivo Excel", type=["xlsx", "xls"])
@@ -217,14 +217,18 @@ def mostrar_altpro():
                 st.dataframe(df_materiales, use_container_width=True)
                 
             st.divider()
-            st.markdown("### ¿La información es correcta?")
-            if st.button("✅ Aprobar y Guardar en Base de Datos", use_container_width=True):
+            st.markdown("¿La información es correcta?")
+            if st.button("Aprobar y Guardar en Base de Datos", use_container_width=True):
                 st.success("¡Datos aprobados! (Aquí conectaremos más adelante a Google Sheets para guardar esto).")
                 st.balloons()
 
         except Exception as e:
             st.error(f"Error al leer el documento: {e}")
             st.info("Asegúrate de que el archivo tenga el formato y las pestañas correctas.")
+
+
+def mostrar_estadisticas():
+    st.title("Página en desarrollo...")
 
 # ==========================================
 # FLUJO PRINCIPAL DE LA APP
@@ -238,13 +242,13 @@ def main():
     else:
         st.sidebar.image("https://cdn-icons-png.flaticon.com/512/1055/1055664.png", width=100)
         st.sidebar.title("Menú Principal")
-        st.sidebar.write(f"👤 **Usuario:** {st.session_state.get('usuario_actual', '')}")
+        st.sidebar.write(f"**Usuario:** {st.session_state.get('usuario_actual', '')}")
         st.sidebar.divider()
         
-        opcion = st.sidebar.radio("Navegación:", ["🏠 Inicio", "📂 AltPro"])
+        opcion = st.sidebar.radio("Navegación:", ["Inicio", "AltPro","Estadísticas"])
         
         st.sidebar.divider()
-        if st.sidebar.button("🚪 Cerrar Sesión"):
+        if st.sidebar.button("Cerrar Sesión"):
             st.session_state["logeado"] = False
             st.session_state["usuario_actual"] = None
             st.rerun()
