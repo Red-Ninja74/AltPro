@@ -355,8 +355,8 @@ def mostrar_altpro():
 def mostrar_estadisticas():
     st.title("Estadísticas")
     st.header("Página en desarrollo...")
-    if st.button("Aprobar y Guardar en Base de Datos", use_container_width=True):
-        st.success("¡Descargar reporte!")
+    if st.button("Descargar reporte", use_container_width=True):
+        st.success("Reporte descargado con éxito!")
         st.balloons()
 
 # ==========================================
