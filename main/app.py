@@ -354,8 +354,10 @@ def mostrar_altpro():
 
 def mostrar_estadisticas():
     st.title("Estadísticas")
-    st.info("Página en desarrollo...")
-
+    st.header("Página en desarrollo...")
+    if st.button("Aprobar y Guardar en Base de Datos", use_container_width=True):
+        st.success("¡Descargar reporte!")
+        st.balloons()
 
 # ==========================================
 # FLUJO PRINCIPAL DE LA APP
