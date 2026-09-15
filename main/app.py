@@ -101,9 +101,8 @@ class LectorProyectosExcel:
             None,
         )
         if coincidencia:
-            return pd.read_excel(
-                self.archivo, sheet_name=coincidencia, header=None
-            )
+            # Corrección: parsear usando el objeto ExcelFile ya abierto
+            return self.xls.parse(sheet_name=coincidencia, header=None)
         raise ValueError(
             f"No se encontró la pestaña '{nombre_pestana}' en el archivo."
         )
@@ -363,10 +362,10 @@ def mostrar_altpro():
         with tab1:
             st.subheader("Datos del Proyecto")
             col1, col2 = st.columns(2)
-            
+
             # Mostrar el ID asignado en pantalla
             col1.metric(label="ID del Grupo", value=id_grupo)
-            
+
             for i, (clave, valor) in enumerate(alt.items()):
                 if i % 2 == 0:
                     col2.metric(label=clave, value=str(valor))
@@ -419,25 +418,23 @@ def mostrar_altpro():
 
         st.divider()
         st.markdown("### ¿La información es correcta?")
-        
+
         if st.button(
             "✅ Aprobar y Guardar en Base de Datos", use_container_width=True
         ):
             with st.spinner("Guardando en Google Sheets..."):
-                # Estructura requerida por los encabezados de tu Google Sheet
                 datos_evento = {
                     "ID del grupo (XXX-YYY-ZZZ)": id_grupo,
                     "Nombre del Grupo": alt.get("Grupo Estudiantil", ""),
                     "Nombre del Evento": alt.get("Nombre de Proyecto", ""),
                     "Fecha": str(alt.get("Fecha de inicio", "")),
                     "Lugar": alt.get("Lugar", ""),
-                    "Personas": "",           # Se llenará en Registro de Evento
-                    "Huella de Carbono": "", # Se llenará en Registro de Evento
-                    "Duración en horas": "", # Se llenará en Registro de Evento
-                    "Link evidencias": "",   # Se llenará en Registro de Evento
+                    "Personas": "",
+                    "Huella de Carbono": "",
+                    "Duración en horas": "",
+                    "Link evidencias": "",
                 }
 
-                # Guardar mediante la clase BaseDatos_GE
                 db = BaseDatos_GE(nombre_hoja="EVENTOS")
                 exito = db.registrar_datos(datos_evento)
 
