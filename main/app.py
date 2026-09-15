@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from db_manager import BaseDatosEventos
+from db_manager import BaseDatos_GE
 
 # ==========================================
 # CATÁLOGO DE IDs POR GRUPO ESTUDIANTIL
