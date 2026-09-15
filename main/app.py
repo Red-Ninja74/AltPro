@@ -439,7 +439,7 @@ def mostrar_altpro():
 
                 # Guardar mediante la clase BaseDatos_GE
                 db = BaseDatos_GE(nombre_hoja="EVENTOS")
-                exito = db.registrar_evento(datos_evento)
+                exito = db.registrar_datos(datos_evento)
 
                 if exito:
                     st.success("¡Datos aprobados y guardados con éxito en la Base de Datos!")
