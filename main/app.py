@@ -1,5 +1,74 @@
 import pandas as pd
 import streamlit as st
+from db_manager import BaseDatosEventos
+
+# ==========================================
+# CATÁLOGO DE IDs POR GRUPO ESTUDIANTIL
+# ==========================================
+CATALOGO_IDS = {
+    # 🎨 Arte, Cultura y Entretenimiento
+    "ART AT TEC": "HID-ACE-AAT",
+    "BLOOM CRAFT STUDIO": "HID-ACE-BCS",
+    "CINEPHORIA": "HID-ACE-CNP",
+
+    # 🏃 Deportivos y Recreativos
+    "COURT CLUB": "HID-DYR-CCL",
+    "MONKLIMB": "HID-DYR-MKL",
+
+    # 🌱 Ecología y Medio Ambiente
+    "GREEN CREW": "HID-EMA-GCR",
+
+    # 🚀 Liderazgo
+    "ALMA": "HID-LID-ALM",
+    "CARNERO": "HID-LID-CRN",
+    "KREI": "HID-LID-KRE",
+    "LASOS": "HID-LID-LAS",
+    "LEADER HUB": "HID-LID-LHB",
+    "NOVA": "HID-LID-NOV",
+    "REVO": "HID-LID-RVO",
+    "START A NEW LIFE": "HID-LID-SNL",
+
+    # 🧘 Salud y Bienestar
+    "BECOMING": "HID-SYB-BCM",
+    "CLOUD": "HID-SYB-CLD",
+    "ZENIT": "HID-SYB-ZNT",
+
+    # ❤️ Sentido Humano y E. Social
+    "CLICKED": "HID-SHE-CLK",
+    "CORAZÓN EN ACCIÓN": "HID-SHE-CEA",
+    "CORAZON EN ACCION": "HID-SHE-CEA",
+    "ORIX": "HID-SHE-ORX",
+    "VOLUNTAD COMPARTIDA": "HID-SHE-VCO",
+
+    # 🎓 Vinculación Académica
+    "BEETRONIX": "HID-VAC-BTX",
+    "KEYBOT": "HID-VAC-KBT",
+    "NÉBULA": "HID-VAC-NEB",
+    "NEBULA": "HID-VAC-NEB",
+    "NEHS": "HID-VAC-NHS",
+    "STEAM": "HID-VAC-STM",
+    "TOASTMASTERS": "HID-VAC-TMS",
+    "TEC RACING": "HID-VAC-TRA",
+    "VOICES": "HID-VAC-VOC",
+
+    # 🏛️ Asociaciones Estudiantiles
+    "SEAAD": "HID-ASE-AAD",
+    "SEART": "HID-ASE-ART",
+    "SECSG": "HID-ASE-CSG",
+    "SEING": "HID-ASE-ING",
+    "SELAET": "HID-ASE-LAE",
+    "SELCPF": "HID-ASE-CPF",
+    "SENEG": "HID-ASE-NEG",
+
+    # 🔵 FETEC
+    "CVIG": "HID-FTC-VIG",
+    "CRS": "HID-FTC-CRS",
+    "CPE": "HID-FTC-CPE",
+    "SEPREPA": "HID-FTC-PRE",
+    "TRIBUNAL": "HID-FTC-TRB",
+    "COMITÉ EJECUTIVO": "HID-FTC-CEJ",
+    "COMITE EJECUTIVO": "HID-FTC-CEJ",
+}
 
 # ==========================================
 # CONFIGURACIÓN DE PÁGINA STREAMLIT
@@ -45,7 +114,7 @@ class LectorProyectosExcel:
         def safe_get(r, c):
             try:
                 val = df.iloc[r, c]
-                return "" if pd.isna(val) else str(val)
+                return "" if pd.isna(val) else str(val).strip()
             except IndexError:
                 return ""
 
@@ -280,6 +349,10 @@ def mostrar_altpro():
         lugares_data = lector.leer_Lugares()
         df_materiales = lector.leer_Materiales()
 
+        # Asignación automática del ID a partir del grupo
+        nombre_grupo = alt.get("Grupo Estudiantil", "").strip()
+        id_grupo = CATALOGO_IDS.get(nombre_grupo.upper(), "HID-DES-000")
+
         tab1, tab2, tab3, tab4 = st.tabs([
             "Información General",
             "Personas Involucradas",
@@ -290,11 +363,15 @@ def mostrar_altpro():
         with tab1:
             st.subheader("Datos del Proyecto")
             col1, col2 = st.columns(2)
+            
+            # Mostrar el ID asignado en pantalla
+            col1.metric(label="ID del Grupo", value=id_grupo)
+            
             for i, (clave, valor) in enumerate(alt.items()):
                 if i % 2 == 0:
-                    col1.metric(label=clave, value=str(valor))
-                else:
                     col2.metric(label=clave, value=str(valor))
+                else:
+                    col1.metric(label=clave, value=str(valor))
 
         with tab2:
             st.subheader("Personas Involucradas")
@@ -341,12 +418,32 @@ def mostrar_altpro():
             st.dataframe(df_materiales, use_container_width=True)
 
         st.divider()
-        st.markdown("¿La información es correcta?")
+        st.markdown("### ¿La información es correcta?")
+        
         if st.button(
-            "Aprobar y Guardar en Base de Datos", use_container_width=True
+            "✅ Aprobar y Guardar en Base de Datos", use_container_width=True
         ):
-            st.success("¡Datos aprobados!")
-            st.balloons()
+            with st.spinner("Guardando en Google Sheets..."):
+                # Estructura requerida por los encabezados de tu Google Sheet
+                datos_evento = {
+                    "ID del grupo (XXX-YYY-ZZZ)": id_grupo,
+                    "Nombre del Grupo": alt.get("Grupo Estudiantil", ""),
+                    "Nombre del Evento": alt.get("Nombre de Proyecto", ""),
+                    "Fecha": str(alt.get("Fecha de inicio", "")),
+                    "Lugar": alt.get("Lugar", ""),
+                    "Personas": "",           # Se llenará en Registro de Evento
+                    "Huella de Carbono": "", # Se llenará en Registro de Evento
+                    "Duración en horas": "", # Se llenará en Registro de Evento
+                    "Link evidencias": "",   # Se llenará en Registro de Evento
+                }
+
+                # Guardar mediante la clase BaseDatosEventos
+                db = BaseDatosEventos(nombre_hoja="EVENTOS")
+                exito = db.registrar_evento(datos_evento)
+
+                if exito:
+                    st.success("¡Datos aprobados y guardados con éxito en la Base de Datos!")
+                    st.balloons()
 
     except Exception as e:
         st.error(f"Error al leer el documento: {e}")
@@ -358,6 +455,7 @@ def mostrar_estadisticas():
     if st.button("Descargar reporte", use_container_width=True):
         st.success("Reporte descargado con éxito!")
         st.balloons()
+
 
 # ==========================================
 # FLUJO PRINCIPAL DE LA APP
