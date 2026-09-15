@@ -437,8 +437,8 @@ def mostrar_altpro():
                     "Link evidencias": "",   # Se llenará en Registro de Evento
                 }
 
-                # Guardar mediante la clase BaseDatosEventos
-                db = BaseDatosEventos(nombre_hoja="EVENTOS")
+                # Guardar mediante la clase BaseDatos_GE
+                db = BaseDatos_GE(nombre_hoja="EVENTOS")
                 exito = db.registrar_evento(datos_evento)
 
                 if exito:
