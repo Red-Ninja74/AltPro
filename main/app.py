@@ -1,6 +1,7 @@
 import pandas as pd
 import streamlit as st
 from db_manager import BaseDatos_GE
+from streamlit_extras.metric_cards import style_metric_cards
 
 # ==========================================
 # CATÁLOGO DE IDs POR GRUPO ESTUDIANTIL
@@ -473,12 +474,22 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos):
     st.title("Estadísticas")
     col1, col2, col3 = st.columns(3)
     with col1:
-        with st.container(border=True):
-            st.metric(label="Total de Proyectos Registrados", value=total_proyectos)
+        st.metric(label="Total de Proyectos Registrados", value=total_proyectos)
+
     with col2:
-        with st.container(border =True):
-            st.metric(label="Grupo con más eventos", value= f"{grupo_mas_eventos[0]} con ({grupo_mas_eventos[1]}) eventos")
-    st.header("Página en desarrollo...")
+        st.metric(label="Grupo con más eventos", value=str(grupo_mas_eventos[0]), delta=f"{grupo_mas_eventos[1]} eventos",delta_color="normal")
+    with col3:
+        st.metric(
+            label="Promedio por Grupo", value="En desarrollo...", delta="Proyectos activos")
+
+    style_metric_cards(
+        background_color="#F8FAFC",  
+        border_size_px=1,            
+        border_color="#E2E8F0",      
+        border_radius_px=12,         
+        border_left_color="#2563EB", 
+        box_shadow=True              
+    )
     if st.button("Descargar reporte", use_container_width=True):
         st.success("Reporte descargado con éxito!")
         st.balloons()
