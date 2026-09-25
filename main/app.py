@@ -299,8 +299,10 @@ def obtener_total_proyectos():
 def obtener_grupo_mas_eventos():
     db = BaseDatos_GE(nombre_hoja="EVENTOS")
     df = db.obtener_datos()
-    a = df.value_counts()
-    return (a.iloc[1], a.iloc[0])
+    a = df[:,0].value_counts().idxmax()
+    b = df[df.iloc[:,0] == a].iloc[0]
+    c = df.iloc[:,0].value_counts().max()
+    return (b, c)
 
 
 
