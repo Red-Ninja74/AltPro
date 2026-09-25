@@ -299,10 +299,18 @@ def obtener_total_proyectos():
 def obtener_grupo_mas_eventos():
     db = BaseDatos_GE(nombre_hoja="EVENTOS")
     df = db.obtener_datos()
-    a = df[:,0].value_counts().idxmax()
-    b = df[df.iloc[:,0] == a].iloc[0]
-    c = df.iloc[:,0].value_counts().max()
-    return (b, c)
+    if df.empty:
+        return ("Sin datos", 0)
+
+    conteo = df.iloc[:, 0].value_counts()
+    matricula = conteo.idxmax()
+    num_eventos = conteo.max()
+
+    # De las filas de ese grupo, se toma el nombre que más se repite
+    # (así un error ocasional como "SEiNG" no afecta)
+    nombres = df[df.iloc[:, 0] == matricula].iloc[:, 1]
+    nombre = nombres.value_counts().idxmax()
+    return (nombre, num_eventos)
 
 
 
