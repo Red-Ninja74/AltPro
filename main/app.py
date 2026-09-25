@@ -299,8 +299,8 @@ def obtener_total_proyectos():
 def obtener_grupo_mas_eventos():
     db = BaseDatos_GE(nombre_hoja="EVENTOS")
     df = db.obtener_datos()
-    a = df["ID del grupo (XXX-YYY-ZZZ)"].value_counts()
-    return (a.index[0], a.iloc[0])
+    a = df.value_counts()
+    return (a.iloc[1], a.iloc[0])
 
 
 
@@ -463,9 +463,11 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos):
     st.title("Estadísticas")
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric(label="Total de Proyectos Registrados", value=total_proyectos)
+        with st.container(border=True):
+            st.metric(label="Total de Proyectos Registrados", value=total_proyectos)
     with col2:
-        st.metric(label="Grupo con más eventos", value= f"{grupo_mas_eventos[0]} con ({grupo_mas_eventos[1]}) eventos")
+        with st.container(border =True):
+            st.metric(label="Grupo con más eventos", value= f"{grupo_mas_eventos[0]} con ({grupo_mas_eventos[1]}) eventos")
     st.header("Página en desarrollo...")
     if st.button("Descargar reporte", use_container_width=True):
         st.success("Reporte descargado con éxito!")
