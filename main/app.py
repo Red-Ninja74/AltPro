@@ -1,4 +1,5 @@
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 from db_manager import BaseDatos_GE
 from streamlit_extras.metric_cards import style_metric_cards
@@ -302,18 +303,25 @@ def obtener_grupo_mas_eventos():
     df = db.obtener_datos()
     if df.empty:
         return ("Sin datos", 0)
-
     conteo = df.iloc[:, 0].value_counts()
     matricula = conteo.idxmax()
     num_eventos = conteo.max()
-
-    # De las filas de ese grupo, se toma el nombre que más se repite
-    # (así un error ocasional como "SEiNG" no afecta)
     nombres = df[df.iloc[:, 0] == matricula].iloc[:, 1]
     nombre = nombres.value_counts().idxmax()
     return (nombre, num_eventos)
 
-
+def obtener_numero_eventos_grupos():
+    db = BaseDatos_GE(nombre_hoja="EVENTOS")
+    df = db.obtener_datos()
+    if df.empty:
+        return pd.DataFrame(columns=["Grupo", "Eventos"])
+    col_matricula = df.columns[0]
+    col_nombre = df.columns[1]
+    resumen = df.groupby(col_matricula).agg(
+        Grupo=(col_nombre, lambda nombres: nombres.value_counts().idxmax()),
+        Eventos=(col_nombre, "size"),
+    )
+    return resumen.sort_values("Eventos", ascending=False).reset_index(drop=True)
 
 # ==========================================
 # FUNCIONES DE INTERFAZ
@@ -470,7 +478,7 @@ def mostrar_altpro():
         st.error(f"Error al leer el documento: {e}")
 
 
-def mostrar_estadisticas(total_proyectos, grupo_mas_eventos):
+def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.title("Estadísticas")
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -488,8 +496,14 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos):
         border_color="#E2E8F0",      
         border_radius_px=12,         
         border_left_color="#2563EB", 
-        box_shadow=True              
+        box_shadow=True
     )
+
+    st.subheader("Eventos por Grupo")
+    fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", text="Eventos")
+    fig.update_layout(xaxis={"categoryorder": "total descending"})
+    st.plotly_chart(fig, use_container_width=True)
+
     if st.button("Descargar reporte", use_container_width=True):
         st.success("Reporte descargado con éxito!")
         st.balloons()
@@ -536,7 +550,8 @@ def main():
         elif opcion == "📊 Estadísticas":
             total_proyectos = obtener_total_proyectos()
             grupo_mas_eventos = obtener_grupo_mas_eventos()
-            mostrar_estadisticas(total_proyectos, grupo_mas_eventos)
+            eventos_por_grupo = obtener_numero_eventos_grupos()
+            mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo)
 
 if __name__ == "__main__":
     main()
