@@ -260,7 +260,7 @@ class LectorProyectosExcel:
     def leer_Materiales(self):
         df = self._leer_pestana("MATERIAL")
         mat, cant, obs, sol = [], [], [], []
-        fila = 6
+        fila = 7
 
         def safe_val(r, c):
             try:
@@ -289,6 +289,12 @@ class LectorProyectosExcel:
         return df_mat.dropna(subset=["Materiales/Equipo"]).reset_index(
             drop=True
         )
+
+    def obtener_total_proyectos(self):
+        db = BaseDatos_GE(nombre_hoja="EVENTOS")
+        df = db.mostrar_datos()
+        total_proyectos = len(df)
+        return total_proyectos
 
 
 # ==========================================
@@ -448,6 +454,7 @@ def mostrar_altpro():
 
 def mostrar_estadisticas():
     st.title("Estadísticas")
+    st.metric(label = "Total de Proyectos Registrados", value = total_proyectos)
     st.header("Página en desarrollo...")
     if st.button("Descargar reporte", use_container_width=True):
         st.success("Reporte descargado con éxito!")
