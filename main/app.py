@@ -478,17 +478,31 @@ def mostrar_altpro():
         st.error(f"Error al leer el documento: {e}")
 
 
+import streamlit as st
+import plotly.express as px
+
+
 def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.title("Estadísticas")
+    
+    # 1. MÉTRICAS
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric(label="Total de Proyectos Registrados", value=total_proyectos)
 
     with col2:
-        st.metric(label="Grupo con más eventos", value=str(grupo_mas_eventos[0]), delta=f"{grupo_mas_eventos[1]} eventos",delta_color="normal")
+        st.metric(
+            label="Grupo con más eventos", 
+            value=str(grupo_mas_eventos[0]), 
+            delta=f"{grupo_mas_eventos[1]} eventos",
+            delta_color="normal"
+        )
     with col3:
         st.metric(
-            label="Promedio por Grupo", value="En desarrollo...", delta="Proyectos activos")
+            label="Promedio por Grupo", 
+            value="En desarrollo...", 
+            delta="Proyectos activos"
+        )
 
     style_metric_cards(
         background_color="#F8FAFC",  
@@ -499,15 +513,53 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         box_shadow=True
     )
 
-    st.subheader("Eventos por Grupo")
-    fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", text="Eventos")
-    fig.update_layout(xaxis={"categoryorder": "total descending"})
-    st.plotly_chart(fig, use_container_width=True)
+    st.write("") # Espaciador visual
 
+    # 2. GRÁFICA ESTILIZADA EN UN CONTENEDOR
+    with st.container(border=True):
+        st.subheader("📊 Eventos por Grupo")
+        
+        # Generar gráfico base
+        fig = px.bar(
+            eventos_por_grupo, 
+            x="Grupo", 
+            y="Eventos", 
+            text="Eventos"
+        )
+        
+        # Estilo de las barras (color azul a juego con las métricas y esquinas redondeadas)
+        fig.update_traces(
+            marker_color="#2563EB",            # Azul moderno matching con border_left_color
+            marker_pattern_shape="",           # Sin patrones interrumpiendo el color
+            textposition="outside",            # Muestra el número sobre la barra
+            textfont=dict(size=13, weight="bold"),
+            cliponaxis=False                   # Evita que el texto superior se corte
+        )
+        
+        # Estilo del layout general (sin rejillas molestas, fondo transparente)
+        fig.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, # Ordenar y quitar etiqueta sobrante
+            yaxis_title="Cantidad de Eventos",
+            plot_bgcolor="rgba(0,0,0,0)",      # Fondo transparente
+            paper_bgcolor="rgba(0,0,0,0)",     # Fondo de papel transparente
+            margin=dict(l=20, r=20, t=30, b=20), # Márgenes limpios
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), # Tipografía limpia
+            yaxis=dict(
+                showgrid=True, 
+                gridcolor="#F1F5F9",            # Líneas de guía muy suaves
+                zeroline=False
+            )
+        )
+        
+        # Renderizar en Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.write("") # Espaciador visual
+
+    # 3. BOTÓN DE DESCARGA
     if st.button("Descargar reporte", use_container_width=True):
         st.success("Reporte descargado con éxito!")
         st.balloons()
-
 
 # ==========================================
 # FLUJO PRINCIPAL DE LA APP
