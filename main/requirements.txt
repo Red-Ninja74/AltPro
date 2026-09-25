@@ -4,3 +4,4 @@ openpyxl
 st-gsheets-connection
 streamlit-extras
 plotly
+streamlit-calendar

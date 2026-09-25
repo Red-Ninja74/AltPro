@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.express as px
 import streamlit as st
 from db_manager import BaseDatos_GE
+from streamlit_calendar import calendar
 from streamlit_extras.metric_cards import style_metric_cards
 
 # ==========================================
@@ -323,6 +324,28 @@ def obtener_numero_eventos_grupos():
     )
     return resumen.sort_values("Eventos", ascending=False).reset_index(drop=True)
 
+def obtener_eventos_calendario():
+    db = BaseDatos_GE(nombre_hoja="EVENTOS")
+    df = db.obtener_datos()
+    if df.empty:
+        return []
+    # Columna 3 (D): fechas en formato día/mes/año, p. ej. "18/9/2026"
+    fechas = pd.to_datetime(df.iloc[:, 3], errors="coerce", format="%d/%m/%Y")
+    eventos = []
+    for i, fecha in enumerate(fechas):
+        # Se omiten las filas con fecha vacía o con formato inválido
+        if pd.isna(fecha):
+            continue
+        nombre_grupo = df.iloc[i, 1]
+        nombre_evento = df.iloc[i, 2]
+        eventos.append({
+            "title": f"{nombre_evento} ({nombre_grupo})",
+            "start": fecha.strftime("%Y-%m-%d"),
+            "allDay": True,
+        })
+    return eventos
+
+
 # ==========================================
 # FUNCIONES DE INTERFAZ
 # ==========================================
@@ -482,6 +505,27 @@ import streamlit as st
 import plotly.express as px
 
 
+def mostrar_calendario(eventos):
+    with st.container(border=True):
+        st.subheader("Calendario de Eventos")
+        calendar(
+            events=eventos,
+            options={
+                "initialView": "dayGridMonth",
+                "locale": "es",
+                "firstDay": 1,
+                "headerToolbar": {
+                    "left": "prev,next today",
+                    "center": "title",
+                    "right": "dayGridMonth,listMonth",
+                },
+                "buttonText": {"today": "Hoy", "month": "Mes", "list": "Lista"},
+                "eventColor": "#2563EB",
+            },
+            key="calendario_inicio",
+        )
+
+
 def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.title("Estadísticas")
     
@@ -565,6 +609,7 @@ def main():
                 " Selecciona **AltPro** en el menú de la izquierda para"
                 " comenzar."
             )
+            mostrar_calendario(obtener_eventos_calendario())
         elif opcion == "📂 AltPro":
             mostrar_altpro()
         elif opcion == "📊 Estadísticas":
