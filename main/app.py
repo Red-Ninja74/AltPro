@@ -324,6 +324,20 @@ def obtener_numero_eventos_grupos():
     )
     return resumen.sort_values("Eventos", ascending=False).reset_index(drop=True)
 
+# Color de cada evento en el calendario según la categoría del grupo
+COLORES_CATEGORIA = {
+    "ACE": "#DB2777",  # Arte, Cultura y Entretenimiento
+    "DYR": "#EA580C",  # Deportivos y Recreativos
+    "EMA": "#16A34A",  # Ecología y Medio Ambiente
+    "LID": "#7C3AED",  # Liderazgo
+    "SYB": "#0D9488",  # Salud y Bienestar
+    "SHE": "#DC2626",  # Sentido Humano y E. Social
+    "VAC": "#2563EB",  # Vinculación Académica
+    "ASE": "#CA8A04",  # Asociaciones Estudiantiles
+    "FTC": "#1E3A8A",  # FETEC
+}
+
+
 def obtener_eventos_calendario():
     db = BaseDatos_GE(nombre_hoja="EVENTOS")
     df = db.obtener_datos()
@@ -336,12 +350,21 @@ def obtener_eventos_calendario():
         # Se omiten las filas con fecha vacía o con formato inválido
         if pd.isna(fecha):
             continue
-        nombre_grupo = df.iloc[i, 1]
-        nombre_evento = df.iloc[i, 2]
+        id_grupo = str(df.iloc[i, 0])
+        lugar = df.iloc[i, 4]
+        # La categoría es la parte central del ID, p. ej. "HID-ASE-ING" -> "ASE"
+        partes_id = id_grupo.split("-")
+        categoria = partes_id[1] if len(partes_id) == 3 else ""
         eventos.append({
-            "title": f"{nombre_evento} ({nombre_grupo})",
+            "title": str(df.iloc[i, 2]),
             "start": fecha.strftime("%Y-%m-%d"),
             "allDay": True,
+            "color": COLORES_CATEGORIA.get(categoria, "#2563EB"),
+            "extendedProps": {
+                "grupo": str(df.iloc[i, 1]),
+                "lugar": "Sin lugar registrado" if pd.isna(lugar) else str(lugar),
+                "fecha": fecha.strftime("%d/%m/%Y"),
+            },
         })
     return eventos
 
@@ -505,10 +528,45 @@ import streamlit as st
 import plotly.express as px
 
 
+CSS_CALENDARIO = """
+    .fc-event {
+        border: none;
+        border-radius: 6px;
+        padding: 3px 6px;
+        margin: 2px 3px;
+        cursor: pointer;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    }
+    .fc-event:hover {
+        filter: brightness(1.1);
+    }
+    /* El texto largo se parte en varias líneas en vez de cortarse */
+    .fc-daygrid-event,
+    .fc-event-main,
+    .fc-event-title {
+        white-space: normal !important;
+        overflow: visible !important;
+        word-break: break-word;
+    }
+    .fc-event-title {
+        font-size: 0.8rem;
+        font-weight: 600;
+        line-height: 1.25;
+    }
+    .fc-toolbar-title {
+        font-size: 1.3rem;
+        text-transform: capitalize;
+    }
+    .fc-day-today {
+        background: #EFF6FF !important;
+    }
+"""
+
+
 def mostrar_calendario(eventos):
     with st.container(border=True):
         st.subheader("Calendario de Eventos")
-        calendar(
+        resultado = calendar(
             events=eventos,
             options={
                 "initialView": "dayGridMonth",
@@ -520,10 +578,28 @@ def mostrar_calendario(eventos):
                     "right": "dayGridMonth,listMonth",
                 },
                 "buttonText": {"today": "Hoy", "month": "Mes", "list": "Lista"},
-                "eventColor": "#2563EB",
+                "eventDisplay": "block",
+                # Los días crecen para mostrar todos sus eventos
+                "dayMaxEvents": False,
+                "contentHeight": "auto",
             },
+            custom_css=CSS_CALENDARIO,
+            callbacks=["eventClick"],
             key="calendario_inicio",
         )
+
+        # Detalle del evento al que se le dio click
+        if resultado and resultado.get("callback") == "eventClick":
+            evento = resultado["eventClick"]["event"]
+            datos = evento.get("extendedProps", {})
+            with st.container(border=True):
+                st.markdown(f"### {evento['title']}")
+                col1, col2, col3 = st.columns(3)
+                col1.markdown(f"**👥 Grupo**  \n{datos.get('grupo', '')}")
+                col2.markdown(f"**📍 Lugar**  \n{datos.get('lugar', '')}")
+                col3.markdown(f"**📅 Fecha**  \n{datos.get('fecha', '')}")
+        else:
+            st.caption("Da click en un evento para ver sus detalles.")
 
 
 def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
