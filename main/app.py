@@ -511,7 +511,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
 
     with st.container(border=True):
         st.subheader("Eventos por Grupo")
-        fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=px.colors.sequential.Blues)
+        fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
         fig.update_traces(marker_pattern_shape="", cliponaxis=False)
         fig.update_layout(
         xaxis={"categoryorder": "total descending", "title": ""}, 
