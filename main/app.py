@@ -291,9 +291,8 @@ class LectorProyectosExcel:
         )
 
     def obtener_total_proyectos(self):
-        db = BaseDatos_GE(nombre_hoja="EVENTOS")
-        df = db.mostrar_datos()
-        total_proyectos = len(df)
+        df = self.conn.read(worksheet=self.nombre_hoja, ttl=0)
+        total_proyectos = len(df[:, 0])
         return total_proyectos
 
 
