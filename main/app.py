@@ -296,6 +296,12 @@ def obtener_total_proyectos():
     df = db.obtener_datos()
     return len(df)  
 
+def obtener_grupo_mas_eventos():
+    db = BaseDatos_GE(nombre_hoja="EVENTOS")
+    df = db.obtener_datos()
+    a = df["ID del grupo (XXX-YYY-ZZZ)"].value_counts()
+    return a.iloc[0]
+
 
 
 # ==========================================
@@ -453,9 +459,13 @@ def mostrar_altpro():
         st.error(f"Error al leer el documento: {e}")
 
 
-def mostrar_estadisticas(total_proyectos):
+def mostrar_estadisticas(total_proyectos, grupo_mas_eventos):
     st.title("Estadísticas")
-    st.metric(label = "Total de Proyectos Registrados", value = total_proyectos)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric(label="Total de Proyectos Registrados", value=total_proyectos)
+    with col2:
+        st.metric(label="Grupo con más eventos", value=grupo_mas_eventos)
     st.header("Página en desarrollo...")
     if st.button("Descargar reporte", use_container_width=True):
         st.success("Reporte descargado con éxito!")
@@ -502,7 +512,8 @@ def main():
             mostrar_altpro()
         elif opcion == "📊 Estadísticas":
             total_proyectos = obtener_total_proyectos()
-            mostrar_estadisticas(total_proyectos)
+            grupo_mas_eventos = obtener_grupo_mas_eventos()
+            mostrar_estadisticas(total_proyectos, grupo_mas_eventos)
 
 if __name__ == "__main__":
     main()
