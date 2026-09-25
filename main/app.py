@@ -521,8 +521,9 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         margin=dict(l=20, r=20, t=30, b=20), 
         font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-        coloraxis_showscale=False 
-    ) 
+        coloraxis_showscale=False
+    )
+        st.plotly_chart(fig, use_container_width=True)
 
     if st.button("Descargar reporte", use_container_width=True):
         st.success("Reporte descargado con éxito!")
