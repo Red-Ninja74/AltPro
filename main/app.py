@@ -290,10 +290,12 @@ class LectorProyectosExcel:
             drop=True
         )
 
-    def obtener_total_proyectos(self):
-        self.obtener_datos()
-        total_proyectos = len(self.df[:, 0])
-        return total_proyectos
+
+def obtener_total_proyectos():
+    db = BaseDatos_GE(nombre_hoja="EVENTOS")
+    df = db.obtener_datos()
+    return len(df)  
+
 
 
 # ==========================================
@@ -451,7 +453,7 @@ def mostrar_altpro():
         st.error(f"Error al leer el documento: {e}")
 
 
-def mostrar_estadisticas():
+def mostrar_estadisticas(total_proyectos):
     st.title("Estadísticas")
     st.metric(label = "Total de Proyectos Registrados", value = total_proyectos)
     st.header("Página en desarrollo...")
@@ -499,8 +501,8 @@ def main():
         elif opcion == "📂 AltPro":
             mostrar_altpro()
         elif opcion == "📊 Estadísticas":
-            mostrar_estadisticas()
-
+            total_proyectos = obtener_total_proyectos()
+            mostrar_estadisticas(total_proyectos)
 
 if __name__ == "__main__":
     main()
