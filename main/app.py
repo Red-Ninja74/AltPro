@@ -291,8 +291,8 @@ class LectorProyectosExcel:
         )
 
     def obtener_total_proyectos(self):
-        df = self.conn.read(worksheet=self.nombre_hoja, ttl=0)
-        total_proyectos = len(df[:, 0])
+        self.obtener_datos()
+        total_proyectos = len(self.df[:, 0])
         return total_proyectos
 
 
