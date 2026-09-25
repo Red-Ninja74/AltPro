@@ -300,7 +300,7 @@ def obtener_grupo_mas_eventos():
     db = BaseDatos_GE(nombre_hoja="EVENTOS")
     df = db.obtener_datos()
     a = df["ID del grupo (XXX-YYY-ZZZ)"].value_counts()
-    return a.iloc[0]
+    return a.index[0], a.iloc[0]
 
 
 
