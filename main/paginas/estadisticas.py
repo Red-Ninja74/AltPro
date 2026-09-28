@@ -1,0 +1,51 @@
+import plotly.express as px
+import streamlit as st
+from streamlit_extras.metric_cards import style_metric_cards
+
+
+def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
+    st.title("Estadísticas")
+    
+    # 1. MÉTRICAS
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric(label="Total de Proyectos Registrados", value=total_proyectos)
+
+    with col2:
+        st.metric(
+            label="Grupo con más eventos", 
+            value=str(grupo_mas_eventos[0]), 
+            delta=f"{grupo_mas_eventos[1]} eventos",
+            delta_color="normal"
+        )
+    with col3:
+        st.metric(
+            label="Promedio por Grupo", 
+            value="En desarrollo...", 
+            delta="Proyectos activos"
+        )
+
+    style_metric_cards(
+        background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
+
+    st.write("") 
+
+    with st.container(border=True):
+        st.subheader("Eventos por Grupo")
+        fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
+        fig.update_traces(marker_pattern_shape="", cliponaxis=False)
+        fig.update_layout(
+        xaxis={"categoryorder": "total descending", "title": ""}, 
+        yaxis_title="Cantidad de Eventos", 
+        plot_bgcolor="rgba(0,0,0,0)", 
+        paper_bgcolor="rgba(0,0,0,0)",     
+        margin=dict(l=20, r=20, t=30, b=20), 
+        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+        coloraxis_showscale=False
+    )
+        st.plotly_chart(fig, use_container_width=True)
+
+    if st.button("Descargar reporte", use_container_width=True):
+        st.success("Reporte descargado con éxito!")
+        st.balloons()
