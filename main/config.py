@@ -66,6 +66,13 @@ CATALOGO_IDS = {
     "COMITE EJECUTIVO": "HID-FTC-CEJ",
 }
 
+# Grupos cuyo nombre son siglas: se muestran siempre en mayúsculas
+SIGLAS_GRUPOS = {
+    "NEHS", "STEAM",
+    "SEAAD", "SEART", "SECSG", "SEING", "SELAET", "SELCPF", "SENEG",
+    "CVIG", "CRS", "CPE", "SEPREPA",
+}
+
 # Nombre de cada giro según la parte central del ID (p. ej. "HID-ASE-ING")
 NOMBRES_GIRO = {
     "ACE": "Arte, Cultura y Entretenimiento",

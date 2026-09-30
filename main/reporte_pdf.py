@@ -12,7 +12,6 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-from config import CATALOGO_IDS, NOMBRES_GIRO
 from consultas import obtener_numero_eventos_grupos
 
 
@@ -74,11 +73,6 @@ class reporte_pdf:
             leading=13,
             textColor=colors.HexColor("#2D3748"),
         )
-        lista_giro_style = ParagraphStyle(
-            "ListaGiro",
-            parent=body_style,
-            spaceAfter=4,
-        )
         header_table_style = ParagraphStyle(
             "HeaderTable",
             parent=body_style,
@@ -102,22 +96,8 @@ class reporte_pdf:
             ]
         )
 
-        # Lista compacta de grupos por giro: "Giro: GRUPO, GRUPO, ..."
-        grupos_por_giro = {}
-        for nombre, id_grupo in CATALOGO_IDS.items():
-            giro = id_grupo.split("-")[1]
-            grupos = grupos_por_giro.setdefault(giro, {})
-            # Algunos grupos aparecen dos veces (con y sin acento); se deja
-            # solo el primer nombre de cada ID
-            grupos.setdefault(id_grupo, nombre)
-        lista_giros = [
-            Paragraph(
-                f"<b>{escape(NOMBRES_GIRO.get(giro, giro))}:</b> "
-                f"{escape(', '.join(grupos.values()))}",
-                lista_giro_style,
-            )
-            for giro, grupos in grupos_por_giro.items()
-        ]
+        tabla_grupos.setStyle(estilo_tabla)
+        tabla_grupos.setStyle([("SPAN", (0, 0), (2, 0))])  # Unifica el encabezado
 
         # Tabla con el número de eventos de cada grupo (datos de la hoja)
         if datos_grupos.empty:
@@ -143,11 +123,13 @@ class reporte_pdf:
         story.append(Paragraph("Reporte de Gestión", title_style))
         story.append(Spacer(1, 12))
         story.append(Paragraph("Grupos Estudiantiles", h2_style))
-        story.extend(lista_giros)
+        story.append(tabla_grupos)
         story.append(Spacer(1, 8))
         story.append(tabla_eventos)
         story.append(Spacer(1, 12))
-        story.append(Paragraph("Estadísticas por Giro", title_style))
+        story.append(Paragraph("Estadísticas", title_style))
+        story.append(Paragraph("Resumen general", h2_style))
+        story.append(Spacer(1, 12))
         story.append(Spacer(1, 12))
         story.append(Paragraph("Arte, Cultura y Entretenimiento", h2_style))
         story.append(Spacer(1, 12))
