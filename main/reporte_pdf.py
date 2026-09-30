@@ -1,10 +1,15 @@
 from io import BytesIO
 from xml.sax.saxutils import escape
 
+from reportlab.graphics.charts.barcharts import VerticalBarChart
+from reportlab.graphics.shapes import Drawing
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.platypus import (
+    KeepTogether,
+    ListFlowable,
+    ListItem,
     Paragraph,
     SimpleDocTemplate,
     Spacer,
@@ -12,7 +17,135 @@ from reportlab.platypus import (
     TableStyle,
 )
 
+from config import CATALOGO_IDS, NOMBRES_GIRO, SIGLAS_GRUPOS
 from consultas import obtener_numero_eventos_grupos
+
+# Palabras que van en minúscula dentro de un nombre (excepto al inicio)
+PALABRAS_MENORES = {"A", "AT", "DE", "EN", "Y"}
+
+
+def formatear_nombre(nombre):
+    """ "LEADER HUB" -> "Leader Hub"; las siglas como "SEING" se quedan igual."""
+    if nombre in SIGLAS_GRUPOS:
+        return nombre
+    palabras = []
+    for i, palabra in enumerate(nombre.split()):
+        if i > 0 and palabra in PALABRAS_MENORES:
+            palabras.append(palabra.lower())
+        else:
+            palabras.append(palabra.capitalize())
+    return " ".join(palabras)
+
+
+def grafica_eventos_por_grupo(datos_grupos, ancho=528, alto=260):
+    """Gráfica de barras con el mismo estilo que la de Estadísticas."""
+    datos = datos_grupos.sort_values("Eventos", ascending=False)
+    grupos = [str(g) for g in datos["Grupo"]]
+    eventos = [int(e) for e in datos["Eventos"]]
+
+    dibujo = Drawing(ancho, alto)
+    grafica = VerticalBarChart()
+    grafica.x = 40
+    grafica.y = 90  # espacio abajo para los nombres inclinados
+    grafica.width = ancho - 50
+    grafica.height = alto - 110
+    grafica.data = [eventos]
+    grafica.barSpacing = 2
+    grafica.groupSpacing = 6
+    grafica.bars.strokeColor = None
+
+    # Degradado de azul claro (menos eventos) a azul marino (más eventos)
+    claro = colors.HexColor("#93C5FD")
+    oscuro = colors.HexColor("#1E3A8A")
+    minimo, maximo = min(eventos), max(eventos)
+    for i, valor in enumerate(eventos):
+        t = 0 if maximo == minimo else (valor - minimo) / (maximo - minimo)
+        grafica.bars[(0, i)].fillColor = colors.linearlyInterpolatedColor(
+            claro, oscuro, 0, 1, t
+        )
+
+    gris = colors.HexColor("#64748B")
+    grafica.categoryAxis.categoryNames = grupos
+    grafica.categoryAxis.labels.angle = 45
+    grafica.categoryAxis.labels.boxAnchor = "ne"
+    grafica.categoryAxis.labels.fontName = "Helvetica"
+    grafica.categoryAxis.labels.fontSize = 7
+    grafica.categoryAxis.labels.fillColor = gris
+    grafica.categoryAxis.strokeColor = colors.HexColor("#CBD5E0")
+
+    grafica.valueAxis.valueMin = 0
+    grafica.valueAxis.valueStep = max(1, -(-maximo // 5))  # ~5 líneas guía
+    grafica.valueAxis.labels.fontName = "Helvetica"
+    grafica.valueAxis.labels.fontSize = 8
+    grafica.valueAxis.labels.fillColor = gris
+    grafica.valueAxis.strokeColor = None
+    grafica.valueAxis.visibleGrid = True
+    grafica.valueAxis.gridStrokeColor = colors.HexColor("#E2E8F0")
+    grafica.valueAxis.gridStrokeWidth = 0.5
+
+    # Número de eventos encima de cada barra
+    grafica.barLabelFormat = "%d"
+    grafica.barLabels.fontName = "Helvetica"
+    grafica.barLabels.fontSize = 7
+    grafica.barLabels.fillColor = gris
+    grafica.barLabels.nudge = 6
+
+    dibujo.add(grafica)
+    return dibujo
+
+
+def lista_grupos_por_giro(giro_style, body_style, ancho=528, num_columnas=3):
+    """Lista de grupos por giro acomodada en columnas para ocupar poco espacio."""
+    grupos_por_giro = {}
+    for nombre, id_grupo in CATALOGO_IDS.items():
+        giro = id_grupo.split("-")[1]
+        grupos = grupos_por_giro.setdefault(giro, {})
+        # Algunos grupos aparecen dos veces (con y sin acento); se deja
+        # solo el primer nombre de cada ID
+        grupos.setdefault(id_grupo, nombre)
+
+    # Se reparten los giros en columnas, en orden, con un número parecido de
+    # renglones en cada una (cada giro cuenta su título + sus grupos)
+    total_renglones = sum(len(g) + 1 for g in grupos_por_giro.values())
+    limite = total_renglones / num_columnas * 1.1
+    columnas = [[]]
+    renglones = 0
+    for giro, grupos in grupos_por_giro.items():
+        tamano = len(grupos) + 1
+        if renglones + tamano > limite and columnas[-1] and len(columnas) < num_columnas:
+            columnas.append([])
+            renglones = 0
+        renglones += tamano
+        columnas[-1].append(
+            Paragraph(escape(NOMBRES_GIRO.get(giro, giro)), giro_style)
+        )
+        columnas[-1].append(
+            ListFlowable(
+                [
+                    ListItem(
+                        Paragraph(escape(formatear_nombre(n)), body_style),
+                        leftIndent=12,
+                    )
+                    for n in grupos.values()
+                ],
+                bulletType="bullet",
+                start="•",
+                bulletFontSize=9,
+                bulletColor=colors.HexColor("#2B6CB0"),
+                leftIndent=12,
+            )
+        )
+    while len(columnas) < num_columnas:
+        columnas.append([])
+
+    # Tabla sin bordes: solo sirve para acomodar las columnas lado a lado
+    tabla = Table([columnas], colWidths=[ancho / num_columnas] * num_columnas)
+    tabla.setStyle(TableStyle([
+        ("VALIGN", (0, 0), (-1, -1), "TOP"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 0),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+    ]))
+    return tabla
 
 
 class reporte_pdf:
@@ -42,6 +175,8 @@ class reporte_pdf:
             topMargin=36,
             bottomMargin=36,
         )
+        # Ancho disponible dentro de los márgenes (el marco deja 6 pt por lado)
+        ancho_util = doc.width - 12
         story = []
         styles = getSampleStyleSheet()
 
@@ -73,63 +208,32 @@ class reporte_pdf:
             leading=13,
             textColor=colors.HexColor("#2D3748"),
         )
-        header_table_style = ParagraphStyle(
-            "HeaderTable",
+        giro_style = ParagraphStyle(
+            "GiroLista",
             parent=body_style,
             fontName="Helvetica-Bold",
-            textColor=colors.white,
-            alignment=1,
+            textColor=colors.HexColor("#1A365D"),
+            spaceBefore=6,
+            spaceAfter=2,
         )
-        estilo_tabla = TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1A365D")),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("TOPPADDING", (0, 0), (-1, -1), 6),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#CBD5E0")),
-                (
-                    "ROWBACKGROUNDS",
-                    (0, 1),
-                    (-1, -1),
-                    [colors.white, colors.HexColor("#F7FAFC")],
-                ),
-            ]
-        )
-
-        tabla_grupos.setStyle(estilo_tabla)
-        tabla_grupos.setStyle([("SPAN", (0, 0), (2, 0))])  # Unifica el encabezado
-
-        # Tabla con el número de eventos de cada grupo (datos de la hoja)
-        if datos_grupos.empty:
-            tabla_eventos = Paragraph(
-                "No hay eventos registrados en la base de datos.", body_style
-            )
-        else:
-            matriz_datos = [[
-                Paragraph("Grupo Estudiantil", header_table_style),
-                Paragraph("Eventos", header_table_style),
-            ]]
-            for grupo, eventos in zip(datos_grupos["Grupo"], datos_grupos["Eventos"]):
-                matriz_datos.append([
-                    # escape() evita que un "<" o "&" en la hoja rompa el PDF
-                    Paragraph(escape(str(grupo)), body_style),
-                    Paragraph(str(eventos), body_style),
-                ])
-            tabla_eventos = Table(
-                matriz_datos, colWidths=[300, 80], repeatRows=1
-            )
-            tabla_eventos.setStyle(estilo_tabla)
 
         story.append(Paragraph("Reporte de Gestión", title_style))
         story.append(Spacer(1, 12))
         story.append(Paragraph("Grupos Estudiantiles", h2_style))
-        story.append(tabla_grupos)
-        story.append(Spacer(1, 8))
-        story.append(tabla_eventos)
+        story.append(lista_grupos_por_giro(giro_style, body_style, ancho=ancho_util))
         story.append(Spacer(1, 12))
         story.append(Paragraph("Estadísticas", title_style))
-        story.append(Paragraph("Resumen general", h2_style))
-        story.append(Spacer(1, 12))
+        if datos_grupos.empty:
+            contenido_resumen = Paragraph(
+                "No hay eventos registrados en la base de datos.", body_style
+            )
+        else:
+            contenido_resumen = grafica_eventos_por_grupo(datos_grupos, ancho=ancho_util)
+        # El subtítulo y la gráfica siempre quedan en la misma página
+        story.append(KeepTogether([
+            Paragraph("Resumen general", h2_style),
+            contenido_resumen,
+        ]))
         story.append(Spacer(1, 12))
         story.append(Paragraph("Arte, Cultura y Entretenimiento", h2_style))
         story.append(Spacer(1, 12))
