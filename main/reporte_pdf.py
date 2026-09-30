@@ -46,7 +46,7 @@ def grafica_eventos_por_grupo(datos_grupos, ancho=528, alto=260):
     dibujo = Drawing(ancho, alto)
     grafica = VerticalBarChart()
     grafica.x = 40
-    grafica.y = 90  # espacio abajo para los nombres inclinados
+    grafica.y = 90 
     grafica.width = ancho - 50
     grafica.height = alto - 110
     grafica.data = [eventos]
