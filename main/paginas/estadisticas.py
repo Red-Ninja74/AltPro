@@ -48,11 +48,17 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     )
         st.plotly_chart(fig, use_container_width=True)
 
-    # El PDF se genera hasta que se oprime el botón (data recibe la función,
-    # no el resultado)
+    # El PDF se arma con los datos ya cargados en la página (tarda
+    # centésimas de segundo) y el botón solo lo descarga
+    try:
+        pdf = reporte_pdf(eventos_por_grupo).crear_reporte()
+    except Exception as e:
+        st.error(f"No se pudo generar el reporte: {e}")
+        return
+
     if st.download_button(
         "Descargar reporte",
-        data=reporte_pdf(eventos_por_grupo).crear_reporte,
+        data=pdf,
         file_name="Reporte_Gestion.pdf",
         mime="application/pdf",
         use_container_width=True,
