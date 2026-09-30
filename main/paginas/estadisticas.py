@@ -2,6 +2,8 @@ import plotly.express as px
 import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
 
+from reporte_pdf import reporte_pdf
+
 
 def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.title("Estadísticas")
@@ -46,6 +48,14 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     )
         st.plotly_chart(fig, use_container_width=True)
 
-    if st.button("Descargar reporte", use_container_width=True):
+    # El PDF se genera hasta que se oprime el botón (data recibe la función,
+    # no el resultado)
+    if st.download_button(
+        "Descargar reporte",
+        data=reporte_pdf(eventos_por_grupo).crear_reporte,
+        file_name="Reporte_Gestion.pdf",
+        mime="application/pdf",
+        use_container_width=True,
+    ):
         st.success("Reporte descargado con éxito!")
         st.balloons()

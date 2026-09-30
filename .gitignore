@@ -1,0 +1,9 @@
+# Archivos generados por Python
+__pycache__/
+*.pyc
+
+# Contraseñas y credenciales de Streamlit (nunca subir)
+**/.streamlit/secrets.toml
+
+# PDFs de prueba generados localmente
+Reporte_*.pdf
