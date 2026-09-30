@@ -12,6 +12,7 @@ from reportlab.platypus import (
     TableStyle,
 )
 
+from config import CATALOGO_IDS, NOMBRES_GIRO
 from consultas import obtener_numero_eventos_grupos
 
 
@@ -73,6 +74,11 @@ class reporte_pdf:
             leading=13,
             textColor=colors.HexColor("#2D3748"),
         )
+        lista_giro_style = ParagraphStyle(
+            "ListaGiro",
+            parent=body_style,
+            spaceAfter=4,
+        )
         header_table_style = ParagraphStyle(
             "HeaderTable",
             parent=body_style,
@@ -96,31 +102,22 @@ class reporte_pdf:
             ]
         )
 
-        matriz_grupos = [
-            [
-                Paragraph("Grupos Estudiantiles", header_table_style),
-                Paragraph("", header_table_style),
-                Paragraph("", header_table_style),
-            ],
-            [
-                Paragraph("Art at Tec", body_style),
-                Paragraph("Bloom Craft", body_style),
-                Paragraph("Court Club", body_style),
-            ],
-            [
-                Paragraph("Cinephoria", body_style),
-                Paragraph("SEING", body_style),
-                Paragraph("SEAAD", body_style),
-            ],
-            [
-                Paragraph("SENEG", body_style),
-                Paragraph("SELAET", body_style),
-                Paragraph("SEPREPA", body_style),
-            ],
+        # Lista compacta de grupos por giro: "Giro: GRUPO, GRUPO, ..."
+        grupos_por_giro = {}
+        for nombre, id_grupo in CATALOGO_IDS.items():
+            giro = id_grupo.split("-")[1]
+            grupos = grupos_por_giro.setdefault(giro, {})
+            # Algunos grupos aparecen dos veces (con y sin acento); se deja
+            # solo el primer nombre de cada ID
+            grupos.setdefault(id_grupo, nombre)
+        lista_giros = [
+            Paragraph(
+                f"<b>{escape(NOMBRES_GIRO.get(giro, giro))}:</b> "
+                f"{escape(', '.join(grupos.values()))}",
+                lista_giro_style,
+            )
+            for giro, grupos in grupos_por_giro.items()
         ]
-        tabla_grupos = Table(matriz_grupos, colWidths=[80, 80, 80])
-        tabla_grupos.setStyle(estilo_tabla)
-        tabla_grupos.setStyle([("SPAN", (0, 0), (2, 0))])  # Unifica el encabezado
 
         # Tabla con el número de eventos de cada grupo (datos de la hoja)
         if datos_grupos.empty:
@@ -146,7 +143,7 @@ class reporte_pdf:
         story.append(Paragraph("Reporte de Gestión", title_style))
         story.append(Spacer(1, 12))
         story.append(Paragraph("Grupos Estudiantiles", h2_style))
-        story.append(tabla_grupos)
+        story.extend(lista_giros)
         story.append(Spacer(1, 8))
         story.append(tabla_eventos)
         story.append(Spacer(1, 12))

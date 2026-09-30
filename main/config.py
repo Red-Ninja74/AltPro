@@ -66,6 +66,19 @@ CATALOGO_IDS = {
     "COMITE EJECUTIVO": "HID-FTC-CEJ",
 }
 
+# Nombre de cada giro según la parte central del ID (p. ej. "HID-ASE-ING")
+NOMBRES_GIRO = {
+    "ACE": "Arte, Cultura y Entretenimiento",
+    "DYR": "Deportivos y Recreativos",
+    "EMA": "Ecología y Medio Ambiente",
+    "LID": "Liderazgo",
+    "SYB": "Salud y Bienestar",
+    "SHE": "Sentido Humano y E. Social",
+    "VAC": "Vinculación Académica",
+    "ASE": "Asociaciones Estudiantiles",
+    "FTC": "FETEC",
+}
+
 # Color de cada evento en el calendario según la categoría del grupo
 COLORES_CATEGORIA = {
     "ACE": "#DB2777",  # Arte, Cultura y Entretenimiento
