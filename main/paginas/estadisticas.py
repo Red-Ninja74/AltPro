@@ -27,11 +27,12 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             value="En desarrollo...", 
             delta="Proyectos activos"
         )
-
+    st.write("") 
     style_metric_cards(
         background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
     
     cola, colb, colc = st.columns(3)
+    st.subheader("Configuración de Reporte")
     if st.radio('Tipo de Reporte:', ['General','Personalizado'])== "Personalizado":
         with cola:  
                 st.multiselect('Seleccione el/los Giro(s)', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
@@ -61,9 +62,10 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
           
     
     st.plotly_chart(fig, use_container_width=True)
-
+   
     # El PDF se arma con los datos ya cargados en la página (tarda
     # centésimas de segundo) y el botón solo lo descarga
+    
     try:
         pdf = reporte_pdf(eventos_por_grupo).crear_reporte()
     except Exception as e:
