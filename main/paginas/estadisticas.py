@@ -55,6 +55,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     
     cola, colb, colc = st.columns(3)
     st.subheader("Configuración de Reporte")
+    st.write("")
     if st.radio('Tipo de Reporte:', ['General','Personalizado'])== "Personalizado":
         with cola:  
                 st.multiselect('Seleccione el/los Giro(s)', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
