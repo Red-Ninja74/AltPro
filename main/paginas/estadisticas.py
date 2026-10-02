@@ -32,14 +32,16 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
     
     cola, colb, colc = st.columns(3)
-    with cola:  
-        st.multiselect('Giro', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
-    with colb:
-        st.multiselect('Grupos', [1,2,3])
-    with colc:
-        if st.radio('Rango personalizado de fechas:', ['Si','No'])== "Si":
-            st.date_input('Fecha de Inicio', value=None, min_value=None, max_value=None, key=None)
-            st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
+    if st.radio('Tipo de Reporte:', ['General','Personalizado'])== "Personalizado":
+        with cola:  
+                st.multiselect('Seleccione el/los Giro(s)', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
+        with colb:
+            if st.radio('Grupos deseados:', ['Todos los grupos','Personalizado'])== "Personalizado":
+                st.multiselect('Seleccione el/los Grupo(s)', [1,2,3,4,5,6,7,8,9,10])
+        with colc:
+            if st.radio('Rango personalizado de fechas:', ['Si','No'])== "Si":
+                st.date_input('Fecha de Inicio', value=None, min_value=None, max_value=None, key=None)
+                st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
     st.write("")  
     
     with st.container(border=False):
@@ -77,3 +79,5 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     ):
         st.success("Reporte descargado con éxito!")
         st.balloons()
+
+    
