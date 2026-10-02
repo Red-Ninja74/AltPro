@@ -69,7 +69,7 @@ def seccion_reporte(eventos_por_grupo):
             if st.radio('Grupos deseados:', ['Todos los grupos','Personalizado'])== "Personalizado":
                 st.multiselect('Seleccione el/los Grupo(s)', [1,2,3,4,5,6,7,8,9,10])
         with colc:
-            if st.radio('Rango personalizado de fechas:', ['Si','No'])== "Si":
+            if st.radio('Rango personalizado de fechas:', ['No','Si'])== "Si":
                 st.date_input('Fecha de Inicio', value=None, min_value=None, max_value=None, key=None)
                 st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
     st.write("")  
