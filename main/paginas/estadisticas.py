@@ -31,12 +31,13 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     style_metric_cards(
         background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
     
-    st.write("") 
-    st.multiselect('Multiselect', [1,2,3])
-    st.write("") 
-    st.selectbox('Select', [1,2,3,4,5,6])
-    st.write("")
-    st.radio('Pick one:', ['nose','ear'])
+    cola, colb, colc = st.columns(3)
+    with cola:  
+        st.multiselect('Giro', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
+    with colb:
+        st.multiselect('Grupos', [1,2,3])
+    with colc:
+        st.date_input('Date input')
     st.write("")
     
     with st.container(border=True):
