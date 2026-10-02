@@ -31,7 +31,13 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
 
     st.write("") 
-
+    st.multiselect('Multiselect', [1,2,3])
+    st.write("") 
+    st.selectbox('Select', [1,2,3,4,5,6])
+    st.write("")
+    st.radio('Pick one:', ['nose','ear'])
+    st.write("")
+    
     with st.container(border=True):
         st.subheader("Eventos por Grupo")
         fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
