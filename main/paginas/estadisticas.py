@@ -37,10 +37,12 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     with colb:
         st.multiselect('Grupos', [1,2,3])
     with colc:
-        st.date_input('Date input')
+        if st.radio('Rango personalizado de fechas:', ['Si','No'])== "Si":
+            st.date_input('Fecha de Inicio', value=None, min_value=None, max_value=None, key=None)
+            st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
     st.write("")  
     
-    with st.container(border=True):
+    with st.container(border=False):
         st.subheader("Eventos por Grupo")
         fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
         fig.update_traces(marker_pattern_shape="", cliponaxis=False)
