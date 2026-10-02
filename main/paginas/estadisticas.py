@@ -31,6 +31,14 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     style_metric_cards(
         background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
     
+    cola, colb, colc = st.columns(3)
+    with cola:  
+        st.multiselect('Giro', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
+    with colb:
+        st.multiselect('Grupos', [1,2,3])
+    with colc:
+        st.date_input('Date input')
+    st.write("")  
     
     with st.container(border=True):
         st.subheader("Eventos por Grupo")
@@ -46,15 +54,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
         coloraxis_showscale=False
     )
-        
-    cola, colb, colc = st.columns(3)
-    with cola:  
-        st.multiselect('Giro', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
-    with colb:
-        st.multiselect('Grupos', [1,2,3])
-    with colc:
-        st.date_input('Date input')
-    st.write("")    
+          
     
     st.plotly_chart(fig, use_container_width=True)
 
