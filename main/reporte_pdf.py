@@ -18,7 +18,7 @@ from reportlab.platypus import (
 )
 
 from config import CATALOGO_IDS, NOMBRES_GIRO, SIGLAS_GRUPOS
-from consultas import obtener_numero_eventos_grupos
+from consultas import cargar_eventos, obtener_numero_eventos_grupos
 
 # Palabras que van en minúscula dentro de un nombre (excepto al inicio)
 PALABRAS_MENORES = {"A", "AT", "DE", "EN", "Y"}
@@ -164,7 +164,7 @@ class reporte_pdf:
         if self.data is not None:
             datos_grupos = self.data
         else:
-            datos_grupos = obtener_numero_eventos_grupos()
+            datos_grupos = obtener_numero_eventos_grupos(cargar_eventos())
 
         buffer = BytesIO()
         doc = SimpleDocTemplate(

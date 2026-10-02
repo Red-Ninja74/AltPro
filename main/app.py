@@ -1,6 +1,7 @@
 import streamlit as st
 
 from consultas import (
+    cargar_eventos,
     obtener_grupo_mas_eventos,
     obtener_numero_eventos_grupos,
     obtener_total_proyectos,
@@ -44,6 +45,11 @@ def main():
         )
 
         st.sidebar.divider()
+        # Borra la caché para traer de inmediato los cambios hechos a mano en
+        # Google Sheets (normalmente se reutilizan los datos por 5 minutos)
+        if st.sidebar.button("🔄 Actualizar datos"):
+            st.cache_data.clear()
+            st.rerun()
         if st.sidebar.button("Cerrar Sesión"):
             st.session_state["logeado"] = False
             st.session_state["usuario_actual"] = None
@@ -54,9 +60,10 @@ def main():
         elif opcion == "📂 AltPro":
             mostrar_altpro()
         elif opcion == "📊 Estadísticas":
-            total_proyectos = obtener_total_proyectos()
-            grupo_mas_eventos = obtener_grupo_mas_eventos()
-            eventos_por_grupo = obtener_numero_eventos_grupos()
+            df_eventos = cargar_eventos()
+            total_proyectos = obtener_total_proyectos(df_eventos)
+            grupo_mas_eventos = obtener_grupo_mas_eventos(df_eventos)
+            eventos_por_grupo = obtener_numero_eventos_grupos(df_eventos)
             mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo)
 
 if __name__ == "__main__":

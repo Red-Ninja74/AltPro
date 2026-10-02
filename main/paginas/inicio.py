@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_calendar import calendar
 
-from consultas import obtener_eventos_calendario
+from consultas import cargar_eventos, obtener_eventos_calendario
 
 
 CSS_CALENDARIO = """
@@ -85,4 +85,4 @@ def mostrar_inicio():
         " Selecciona **AltPro** en el menú de la izquierda para"
         " comenzar."
     )
-    mostrar_calendario(obtener_eventos_calendario())
+    mostrar_calendario(obtener_eventos_calendario(cargar_eventos()))

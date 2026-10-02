@@ -4,14 +4,16 @@ from config import COLORES_CATEGORIA
 from db_manager import BaseDatos_GE
 
 
-def obtener_total_proyectos():
-    db = BaseDatos_GE(nombre_hoja="EVENTOS")
-    df = db.obtener_datos()
+def cargar_eventos():
+    """Lee la hoja EVENTOS una sola vez; el resultado se pasa a las demás
+    funciones para no repetir la lectura."""
+    return BaseDatos_GE(nombre_hoja="EVENTOS").obtener_datos()
+
+
+def obtener_total_proyectos(df):
     return len(df)  
 
-def obtener_grupo_mas_eventos():
-    db = BaseDatos_GE(nombre_hoja="EVENTOS")
-    df = db.obtener_datos()
+def obtener_grupo_mas_eventos(df):
     if df.empty:
         return ("Sin datos", 0)
     conteo = df.iloc[:, 0].value_counts()
@@ -21,9 +23,7 @@ def obtener_grupo_mas_eventos():
     nombre = nombres.value_counts().idxmax()
     return (nombre, num_eventos)
 
-def obtener_numero_eventos_grupos():
-    db = BaseDatos_GE(nombre_hoja="EVENTOS")
-    df = db.obtener_datos()
+def obtener_numero_eventos_grupos(df):
     if df.empty:
         return pd.DataFrame(columns=["Grupo", "Eventos"])
     col_matricula = df.columns[0]
@@ -33,9 +33,7 @@ def obtener_numero_eventos_grupos():
     return resumen.sort_values("Eventos", ascending=False).reset_index(drop=True)
 
 
-def obtener_eventos_calendario():
-    db = BaseDatos_GE(nombre_hoja="EVENTOS")
-    df = db.obtener_datos()
+def obtener_eventos_calendario(df):
     if df.empty:
         return []
     # Columna 3 (D): fechas en formato día/mes/año, p. ej. "18/9/2026"

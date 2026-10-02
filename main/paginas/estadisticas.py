@@ -50,9 +50,15 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     
     st.plotly_chart(fig, use_container_width=True)
    
+    seccion_reporte(eventos_por_grupo)
+
+
+# Con @st.fragment, al cambiar las opciones del reporte solo se vuelve a
+# ejecutar esta sección y no toda la app (no se vuelve a leer la hoja)
+@st.fragment
+def seccion_reporte(eventos_por_grupo):
     # El PDF se arma con los datos ya cargados en la página (tarda
-    # centésimas de segundo) y el botón solo lo descar              ga
-    
+    # centésimas de segundo) y el botón solo lo descarga
     cola, colb, colc = st.columns(3)
     st.subheader("Configuración de Reporte")
     if st.radio('Tipo de Reporte:', ['General','Personalizado'])== "Personalizado":
