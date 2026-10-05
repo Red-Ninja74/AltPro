@@ -43,7 +43,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
         coloraxis_showscale=False
     )
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, key="grafica_general")
     
     with st.container(border=False):
         st.subheader("Arte y Cultura")
@@ -63,7 +63,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
         coloraxis_showscale=False)
-    st.plotly_chart(fig_ayc, use_container_width=True)
+    st.plotly_chart(fig_ayc, use_container_width=True, key="grafica_ayc")
    
     seccion_reporte(eventos_por_grupo)
     

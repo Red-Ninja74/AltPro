@@ -7,3 +7,6 @@ __pycache__/
 
 # PDFs de prueba generados localmente
 Reporte_*.pdf
+
+# Credenciales locales (nunca subir)
+.env
