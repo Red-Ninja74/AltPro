@@ -7,7 +7,7 @@ from consultas import (
     obtener_total_proyectos,
 )
 from paginas.altpro import mostrar_altpro
-from paginas.estadisticas import mostrar_estadisticas
+from paginas.estadisticas import mostrar_estadisticas, mostrar_estadisticas_generales
 from paginas.inicio import mostrar_inicio
 from paginas.login import mostrar_login
 
@@ -64,7 +64,7 @@ def main():
             total_proyectos = obtener_total_proyectos(df_eventos)
             grupo_mas_eventos = obtener_grupo_mas_eventos(df_eventos)
             eventos_por_grupo = obtener_numero_eventos_grupos(df_eventos)
-            mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo)
+            mostrar_estadisticas_generales(total_proyectos, grupo_mas_eventos, eventos_por_grupo)
 
 if __name__ == "__main__":
     main()

@@ -5,7 +5,8 @@ from config import CATALOGO_IDS, GIROS_GRUPOS
 from reporte_pdf import reporte_pdf
 
 
-def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
+
+def mostrar_estadisticas_generales(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.title("Estadísticas")
     
     # 1. MÉTRICAS
@@ -27,9 +28,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             delta="Proyectos activos"
         )
     st.write("") 
-    style_metric_cards(
-        background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
-    
+    style_metric_cards(background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
     
     with st.container(border=False):
         st.subheader("Eventos por Grupo")
@@ -48,10 +47,27 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
           
     
     st.plotly_chart(fig, use_container_width=True)
+    with st.container(border=False):
+        st.subheader("Arte y Cultura")
+        grupos_ayc = GIROS_GRUPOS.get("Arte y Cultura", [])
+        df_ayc = eventos_por_grupo[eventos_por_grupo["Grupo"].isin(grupos_ayc)]
+        fig_ayc = px.bar(df_ayc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DB6193", "#DB2777"])
+        fig_ayc.update_traces(marker_pattern_shape="", cliponaxis=False)
+        fig_ayc.update_layout(
+        xaxis={"categoryorder": "total descending", "title": ""}, 
+        yaxis_title="Cantidad de Eventos", 
+        plot_bgcolor="rgba(0,0,0,0)", 
+        paper_bgcolor="rgba(0,0,0,0)",     
+        margin=dict(l=20, r=20, t=30, b=20), 
+        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+        coloraxis_showscale=False)
+          
+    st.plotly_chart(fig_ayc, use_container_width=True)
    
     seccion_reporte(eventos_por_grupo)
-
-
+    
+    
 # Con @st.fragment, al cambiar las opciones del reporte solo se vuelve a
 # ejecutar esta sección y no toda la app (no se vuelve a leer la hoja)
 @st.fragment
