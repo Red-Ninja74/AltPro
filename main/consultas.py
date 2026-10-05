@@ -25,11 +25,15 @@ def obtener_grupo_mas_eventos(df):
 
 def obtener_numero_eventos_grupos(df):
     if df.empty:
-        return pd.DataFrame(columns=["Grupo", "Eventos"])
+        return pd.DataFrame(columns=["ID", "Giro", "Grupo", "Eventos"])
     col_matricula = df.columns[0]
     col_nombre = df.columns[1]
     resumen = df.groupby(col_matricula).agg(
         Grupo=(col_nombre, lambda nombres: nombres.value_counts().idxmax()), Eventos=(col_nombre, "size"))
+    # Se conserva el ID y se agrega el código del giro ("HID-ACE-AAT" -> "ACE")
+    # para poder filtrar por giro sin depender de cómo se escribió el nombre
+    resumen = resumen.rename_axis("ID").reset_index()
+    resumen.insert(1, "Giro", resumen["ID"].astype(str).str.split("-").str[1])
     return resumen.sort_values("Eventos", ascending=False).reset_index(drop=True)
 
 

@@ -43,13 +43,15 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
         coloraxis_showscale=False
     )
-          
-    
     st.plotly_chart(fig, use_container_width=True)
+    
     with st.container(border=False):
         st.subheader("Arte y Cultura")
-        grupos_ayc = GIROS_GRUPOS.get("Arte y Cultura", [])
-        df_ayc = eventos_por_grupo[eventos_por_grupo["Grupo"].astype(str).str.strip().str.upper().isin(grupos_ayc)]
+        # Se filtra por el código del giro en el ID ("ACE"), no por el nombre,
+        # porque el nombre puede venir con errores o sin acentos
+        df_ayc = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
+        if df_ayc.empty:
+            st.info("Todavía no hay eventos registrados de Arte y Cultura.")
         fig_ayc = px.bar(df_ayc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DB6193", "#DB2777"])
         fig_ayc.update_traces(marker_pattern_shape="", cliponaxis=False)
         fig_ayc.update_layout(
@@ -61,7 +63,6 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
         coloraxis_showscale=False)
-          
     st.plotly_chart(fig_ayc, use_container_width=True)
    
     seccion_reporte(eventos_por_grupo)
