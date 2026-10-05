@@ -29,9 +29,6 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         )
     st.write("") 
     style_metric_cards(background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
-    st.write("Grupos en el diccionario:", GIROS_GRUPOS.get("Arte y Cultura", []))
-    st.write("Grupos reales en el DataFrame:", eventos_por_grupo["Grupo"].unique().tolist())
-    st.write("Filas resultantes tras el filtro:", len(df_ayc))
     with st.container(border=False):
         st.subheader("Eventos por Grupo")
         fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
@@ -107,7 +104,10 @@ def seccion_reporte(eventos_por_grupo):
                 st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
         ids_filtrados = [CATALOGO_IDS[grupo] for grupo in grupos_seleccionados if grupo in CATALOGO_IDS]
         st.info(f"📌 **IDs a filtrar en la base de datos:** {ids_filtrados}")
-        st.write("")  
+        st.write("")
+        st.write("Grupos en el diccionario:", GIROS_GRUPOS.get("Arte y Cultura", []))
+        st.write("Grupos reales en el DataFrame:", eventos_por_grupo["Grupo"].unique().tolist())
+        st.write("Filas resultantes tras el filtro:", len(df_ayc))  
     
     try:
         pdf = reporte_pdf(eventos_por_grupo).crear_reporte()
