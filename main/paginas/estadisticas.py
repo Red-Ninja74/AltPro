@@ -29,8 +29,9 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         )
     st.write("") 
     style_metric_cards(background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
+    st.title("Eventos por grupo", text_align="center")
     with st.container(border=False):
-        st.subheader("Eventos por Grupo")
+        st.subheader("General")
         fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
         fig.update_traces(marker_pattern_shape="", cliponaxis=False)
         fig.update_layout(
@@ -80,6 +81,24 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
         coloraxis_showscale=False)
     st.plotly_chart(fig_dyr, use_container_width=True, key="grafica_dyr")
+    
+    with st.container(border=False):
+        st.subheader("Ecología y Medio Ambiente")
+        df_ema = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
+        if df_ema.empty:
+            st.info("Todavía no hay eventos registrados de Ecología y Medio Ambiente.")
+        fig_ema = px.bar(df_ema, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#EA9265", "#EA580C"])
+        fig_ema.update_traces(marker_pattern_shape="", cliponaxis=False)
+        fig_ema.update_layout(
+        xaxis={"categoryorder": "total descending", "title": ""}, 
+        yaxis_title="Cantidad de Eventos", 
+        plot_bgcolor="rgba(0,0,0,0)", 
+        paper_bgcolor="rgba(0,0,0,0)",     
+        margin=dict(l=20, r=20, t=30, b=20), 
+        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+        coloraxis_showscale=False)
+    st.plotly_chart(fig_ema, use_container_width=True, key="grafica_ema")
    
     seccion_reporte(eventos_por_grupo)
     
