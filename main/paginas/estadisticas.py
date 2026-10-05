@@ -83,13 +83,13 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.plotly_chart(fig_dyr, use_container_width=True, key="grafica_dyr")
     
     with st.container(border=False):
-        st.subheader("Ecología y Medio Ambiente")
-        df_ema = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
-        if df_ema.empty:
-            st.info("Todavía no hay eventos registrados de Ecología y Medio Ambiente.")
-        fig_ema = px.bar(df_ema, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#EA9265", "#EA580C"])
-        fig_ema.update_traces(marker_pattern_shape="", cliponaxis=False)
-        fig_ema.update_layout(
+        st.subheader("Liderazgo")
+        df_lid = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
+        if df_lid.empty:
+            st.info("Todavía no hay eventos registrados de Liderazgo.")
+        fig_lid = px.bar(df_lid, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#B799E7", "#7C3AED"])
+        fig_lid.update_traces(marker_pattern_shape="", cliponaxis=False)
+        fig_lid.update_layout(
         xaxis={"categoryorder": "total descending", "title": ""}, 
         yaxis_title="Cantidad de Eventos", 
         plot_bgcolor="rgba(0,0,0,0)", 
@@ -98,7 +98,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
         coloraxis_showscale=False)
-    st.plotly_chart(fig_ema, use_container_width=True, key="grafica_ema")
+    st.plotly_chart(fig_lid, use_container_width=True, key="grafica_lid")
    
     seccion_reporte(eventos_por_grupo)
     
