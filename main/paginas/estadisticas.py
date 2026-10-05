@@ -1,14 +1,13 @@
 import plotly.express as px
 import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
-
+from config import CATALOGO_IDS, GIROS_GRUPOS
 from reporte_pdf import reporte_pdf
 
 
 def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.title("Estadísticas")
     
-    autorize_pdf = 0
     # 1. MÉTRICAS
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -66,15 +65,32 @@ def seccion_reporte(eventos_por_grupo):
     if tipo_reporte == "Personalizado":
         cola, colb, colc = st.columns(3)
         with cola:  
-                st.multiselect('Seleccione el/los Giro(s)', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
+            giros_seleccionados = st.multiselect('Seleccione el/los Giro(s)', options=list(GIROS_GRUPOS.keys()))
         with colb:
+            if giros_seleccionados:
+                grupos_disponibles = []
+                for giro in giros_seleccionados:
+                    grupos_disponibles.extend(GIROS_GRUPOS.get(giro, []))
+            else:
+                grupos_disponibles = list(CATALOGO_IDS.keys())
+
+            grupos_disponibles = sorted(list(set(grupos_disponibles)))
+            
+            grupos_seleccionados = []
+            if st.radio('Grupos deseados:', ['Todos los grupos', 'Personalizado']) == "Personalizado":
+                grupos_seleccionados = st.multiselect('Seleccione el/los Grupo(s)', options=grupos_disponibles)
+            else:
+                grupos_seleccionados = grupos_disponibles
+            
             if st.radio('Grupos deseados:', ['Todos los grupos','Personalizado'])== "Personalizado":
                 st.multiselect('Seleccione el/los Grupo(s)', [1,2,3,4,5,6,7,8,9,10])
         with colc:
             if st.radio('Rango personalizado de fechas:', ['No','Si'])== "Si":
                 st.date_input('Fecha de Inicio', value=None, min_value=None, max_value=None, key=None)
                 st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
-    st.write("")  
+        ids_filtrados = [CATALOGO_IDS[grupo] for grupo in grupos_seleccionados if grupo in CATALOGO_IDS]
+        st.info(f"📌 **IDs a filtrar en la base de datos:** {ids_filtrados}")
+        st.write("")  
     
     try:
         pdf = reporte_pdf(eventos_por_grupo).crear_reporte()

@@ -1,3 +1,29 @@
+
+GIROS_GRUPOS = {
+    "Arte y Cultura": ["ART AT TEC", "BLOOM CRAFT STUDIO", "CINEPHORIA"],
+    "Deportivos y Recreativos": ["COURT CLUB", "MONKLIMB"],
+    "Ecología y Medio Ambiente": ["GREEN CREW"],
+    "Liderazgo": [
+        "ALMA", "CARNERO", "KREI", "LASOS", "LEADER HUB", 
+        "NOVA", "REVO", "START A NEW LIFE"
+    ],
+    "Salud y Bienestar": ["BECOMING", "CLOUD", "ZENIT"],
+    "Sentido Humano y E. Social": [
+        "CLICKED", "CORAZÓN EN ACCIÓN", "ORIX", "VOLUNTAD COMPARTIDA"
+    ],
+    "Vinculación Académica": [
+        "BEETRONIX", "KEYBOT", "NÉBULA", "NEHS", 
+        "STEAM", "TOASTMASTERS", "TEC RACING", "VOICES"
+    ],
+    "Asociaciones Estudiantiles": [
+        "SEAAD", "SEART", "SECSG", "SEING", "SELAET", "SELCPF", "SENEG"
+    ],
+    "FETEC": [
+        "CVIG", "CRS", "CPE", "SEPREPA", "TRIBUNAL", "COMITÉ EJECUTIVO"
+    ]
+}
+
+
 # ==========================================
 # CATÁLOGO DE IDs POR GRUPO ESTUDIANTIL
 # ==========================================
