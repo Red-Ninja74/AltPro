@@ -184,25 +184,6 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
                 st.plotly_chart(fig_lid, use_container_width=True, key="grafica_lid")
         
         with st.container(border=False):
-            st.subheader("Liderazgo")
-            df_lid = eventos_por_grupo[eventos_por_grupo["Giro"] == "LID"]
-            if df_lid.empty:
-                st.info("Todavía no hay eventos registrados de Liderazgo.")
-            else:
-                fig_lid = px.bar(df_lid, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#B799E7", "#7C3AED"])
-                fig_lid.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_lid.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_lid, use_container_width=True, key="grafica_lid")   
-
-        with st.container(border=False):
             st.subheader("Sentido Humano y E. Social")
             df_she = eventos_por_grupo[eventos_por_grupo["Giro"] == "SHE"]
             if df_she.empty:
