@@ -47,8 +47,6 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     
     with st.container(border=False):
         st.subheader("Arte y Cultura")
-        # Se filtra por el código del giro en el ID ("ACE"), no por el nombre,
-        # porque el nombre puede venir con errores o sin acentos
         df_ayc = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
         if df_ayc.empty:
             st.info("Todavía no hay eventos registrados de Arte y Cultura.")
@@ -64,6 +62,24 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
         coloraxis_showscale=False)
     st.plotly_chart(fig_ayc, use_container_width=True, key="grafica_ayc")
+    
+    with st.container(border=False):
+        st.subheader("Deportivos y Recreativos")
+        df_dyr = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
+        if df_dyr.empty:
+            st.info("Todavía no hay eventos registrados de Deportivos y Recreativos.")
+        fig_dyr = px.bar(df_dyr, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#EA9265", "#EA580C"])
+        fig_dyr.update_traces(marker_pattern_shape="", cliponaxis=False)
+        fig_dyr.update_layout(
+        xaxis={"categoryorder": "total descending", "title": ""}, 
+        yaxis_title="Cantidad de Eventos", 
+        plot_bgcolor="rgba(0,0,0,0)", 
+        paper_bgcolor="rgba(0,0,0,0)",     
+        margin=dict(l=20, r=20, t=30, b=20), 
+        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+        coloraxis_showscale=False)
+    st.plotly_chart(fig_dyr, use_container_width=True, key="grafica_dyr")
    
     seccion_reporte(eventos_por_grupo)
     
