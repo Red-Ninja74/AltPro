@@ -49,7 +49,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     with st.container(border=False):
         st.subheader("Arte y Cultura")
         grupos_ayc = GIROS_GRUPOS.get("Arte y Cultura", [])
-        df_ayc = eventos_por_grupo[eventos_por_grupo["Grupo"].isin(grupos_ayc)]
+        df_ayc = eventos_por_grupo[eventos_por_grupo["Grupo"].astype(str).str.strip().str.upper().isin(grupos_ayc)]
         fig_ayc = px.bar(df_ayc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DB6193", "#DB2777"])
         fig_ayc.update_traces(marker_pattern_shape="", cliponaxis=False)
         fig_ayc.update_layout(
@@ -105,9 +105,6 @@ def seccion_reporte(eventos_por_grupo):
         ids_filtrados = [CATALOGO_IDS[grupo] for grupo in grupos_seleccionados if grupo in CATALOGO_IDS]
         st.info(f"📌 **IDs a filtrar en la base de datos:** {ids_filtrados}")
         st.write("")
-        st.write("Grupos en el diccionario:", GIROS_GRUPOS.get("Arte y Cultura", []))
-        st.write("Grupos reales en el DataFrame:", eventos_por_grupo["Grupo"].unique().tolist())
-        st.write("Filas resultantes tras el filtro:", len(df_ayc))  
     
     try:
         pdf = reporte_pdf(eventos_por_grupo).crear_reporte()
