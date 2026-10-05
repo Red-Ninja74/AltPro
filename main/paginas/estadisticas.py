@@ -72,7 +72,6 @@ def seccion_reporte(eventos_por_grupo):
             if st.radio('Rango personalizado de fechas:', ['No','Si'])== "Si":
                 st.date_input('Fecha de Inicio', value=None, min_value=None, max_value=None, key=None)
                 st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
-                autorize_pdf = 1
     st.write("")  
     
     try:
@@ -81,15 +80,13 @@ def seccion_reporte(eventos_por_grupo):
         st.error(f"No se pudo generar el reporte: {e}")
         return
 
-    if autorize_pdf == 1:
-        if st.download_button(
-            "Descargar reporte",
-            data=pdf,
-            file_name="Reporte_Gestion.pdf",
-            mime="application/pdf",
-            use_container_width=True,):
-            st.success("Reporte descargado con éxito!")
-            st.balloons()
-            autorize_pdf = 0
+    if st.download_button(
+        "Descargar reporte",
+        data=pdf,
+        file_name="Reporte_Gestion.pdf",
+        mime="application/pdf",
+        use_container_width=True,):
+        st.success("Reporte descargado con éxito!")
+        st.balloons()
 
     
