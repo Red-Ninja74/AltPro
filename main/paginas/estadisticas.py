@@ -85,6 +85,25 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             st.plotly_chart(fig_dyr, use_container_width=True, key="grafica_dyr")
     
     with st.container(border=False):
+        st.subheader("Ecología y Medio Ambiente")
+        df_ema = eventos_por_grupo[eventos_por_grupo["Giro"] == "EMA"]
+        if df_ema.empty:
+            st.info("Todavía no hay eventos registrados de Ecología y Medio Ambiente.")
+        else:
+            fig_ema = px.bar(df_ema, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#469D63", "#16A34A"])
+            fig_ema.update_traces(marker_pattern_shape="", cliponaxis=False)
+            fig_ema.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, 
+            yaxis_title="Cantidad de Eventos", 
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)",     
+            margin=dict(l=20, r=20, t=30, b=20), 
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+            coloraxis_showscale=False)
+            st.plotly_chart(fig_ema, use_container_width=True, key="grafica_ema")
+    
+    with st.container(border=False):
         st.subheader("Liderazgo")
         df_lid = eventos_por_grupo[eventos_por_grupo["Giro"] == "LID"]
         if df_lid.empty:
