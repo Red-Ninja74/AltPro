@@ -67,6 +67,9 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
    
     seccion_reporte(eventos_por_grupo)
     
+    st.write("Grupos en el diccionario:", GIROS_GRUPOS.get("Arte y Cultura", []))
+    st.write("Grupos reales en el DataFrame:", eventos_por_grupo["Grupo"].unique().tolist())
+    st.write("Filas resultantes tras el filtro:", len(df_ayc))
     
 # Con @st.fragment, al cambiar las opciones del reporte solo se vuelve a
 # ejecutar esta sección y no toda la app (no se vuelve a leer la hoja)
