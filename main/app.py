@@ -7,7 +7,7 @@ from consultas import (
     obtener_total_proyectos,
 )
 from paginas.altpro import mostrar_altpro
-from paginas.estadisticas import mostrar_estadisticas, mostrar_estadisticas_generales
+from paginas.estadisticas import mostrar_estadisticas
 from paginas.inicio import mostrar_inicio
 from paginas.login import mostrar_login
 
