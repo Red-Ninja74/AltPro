@@ -51,18 +51,19 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         df_ayc = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
         if df_ayc.empty:
             st.info("Todavía no hay eventos registrados de Arte y Cultura.")
-        fig_ayc = px.bar(df_ayc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DB6193", "#DB2777"])
-        fig_ayc.update_traces(marker_pattern_shape="", cliponaxis=False)
-        fig_ayc.update_layout(
-        xaxis={"categoryorder": "total descending", "title": ""}, 
-        yaxis_title="Cantidad de Eventos", 
-        plot_bgcolor="rgba(0,0,0,0)", 
-        paper_bgcolor="rgba(0,0,0,0)",     
-        margin=dict(l=20, r=20, t=30, b=20), 
-        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-        coloraxis_showscale=False)
-        st.plotly_chart(fig_ayc, use_container_width=True, key="grafica_ayc")
+        else:
+            fig_ayc = px.bar(df_ayc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DB6193", "#DB2777"])
+            fig_ayc.update_traces(marker_pattern_shape="", cliponaxis=False)
+            fig_ayc.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, 
+            yaxis_title="Cantidad de Eventos", 
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)",     
+            margin=dict(l=20, r=20, t=30, b=20), 
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+            coloraxis_showscale=False)
+            st.plotly_chart(fig_ayc, use_container_width=True, key="grafica_ayc")
     
     with st.container(border=False):
         st.subheader("Deportivos y Recreativos")
@@ -71,17 +72,17 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             st.info("Todavía no hay eventos registrados de Deportivos y Recreativos.")
         else:
             fig_dyr = px.bar(df_dyr, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#EA9265", "#EA580C"])
-        fig_dyr.update_traces(marker_pattern_shape="", cliponaxis=False)
-        fig_dyr.update_layout(
-        xaxis={"categoryorder": "total descending", "title": ""}, 
-        yaxis_title="Cantidad de Eventos", 
-        plot_bgcolor="rgba(0,0,0,0)", 
-        paper_bgcolor="rgba(0,0,0,0)",     
-        margin=dict(l=20, r=20, t=30, b=20), 
-        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-        coloraxis_showscale=False)
-        st.plotly_chart(fig_dyr, use_container_width=True, key="grafica_dyr")
+            fig_dyr.update_traces(marker_pattern_shape="", cliponaxis=False)
+            fig_dyr.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, 
+            yaxis_title="Cantidad de Eventos", 
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)",     
+            margin=dict(l=20, r=20, t=30, b=20), 
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+            coloraxis_showscale=False)
+            st.plotly_chart(fig_dyr, use_container_width=True, key="grafica_dyr")
     
     with st.container(border=False):
         st.subheader("Liderazgo")
@@ -90,17 +91,17 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             st.info("Todavía no hay eventos registrados de Liderazgo.")
         else:
             fig_lid = px.bar(df_lid, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#B799E7", "#7C3AED"])
-        fig_lid.update_traces(marker_pattern_shape="", cliponaxis=False)
-        fig_lid.update_layout(
-        xaxis={"categoryorder": "total descending", "title": ""}, 
-        yaxis_title="Cantidad de Eventos", 
-        plot_bgcolor="rgba(0,0,0,0)", 
-        paper_bgcolor="rgba(0,0,0,0)",     
-        margin=dict(l=20, r=20, t=30, b=20), 
-        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-        coloraxis_showscale=False)
-        st.plotly_chart(fig_lid, use_container_width=True, key="grafica_lid")
+            fig_lid.update_traces(marker_pattern_shape="", cliponaxis=False)
+            fig_lid.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, 
+            yaxis_title="Cantidad de Eventos", 
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)",     
+            margin=dict(l=20, r=20, t=30, b=20), 
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+            coloraxis_showscale=False)
+            st.plotly_chart(fig_lid, use_container_width=True, key="grafica_lid")
     
     with st.container(border=False):
         st.subheader("Salud y Bienestar")
@@ -109,17 +110,17 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             st.info("Todavía no hay eventos registrados de Salud y Bienestar.")
         else:
             fig_syb = px.bar(df_syb, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#4D948E", "#0D9488"])
-        fig_syb.update_traces(marker_pattern_shape="", cliponaxis=False)
-        fig_syb.update_layout(
-        xaxis={"categoryorder": "total descending", "title": ""}, 
-        yaxis_title="Cantidad de Eventos", 
-        plot_bgcolor="rgba(0,0,0,0)", 
-        paper_bgcolor="rgba(0,0,0,0)",     
-        margin=dict(l=20, r=20, t=30, b=20), 
-        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-        coloraxis_showscale=False)
-        st.plotly_chart(fig_syb, use_container_width=True, key="grafica_syb")
+            fig_syb.update_traces(marker_pattern_shape="", cliponaxis=False)
+            fig_syb.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, 
+            yaxis_title="Cantidad de Eventos", 
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)",     
+            margin=dict(l=20, r=20, t=30, b=20), 
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+            coloraxis_showscale=False)
+            st.plotly_chart(fig_syb, use_container_width=True, key="grafica_syb")
     
     with st.container(border=False):
         st.subheader("Sentido Humano y E. Social")
@@ -128,17 +129,17 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             st.info("Todavía no hay eventos registrados de Sentido Humano y E. Social.")
         else:
             fig_she = px.bar(df_she, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DC7E7E", "#DC2626"])
-        fig_she.update_traces(marker_pattern_shape="", cliponaxis=False)
-        fig_she.update_layout(
-        xaxis={"categoryorder": "total descending", "title": ""}, 
-        yaxis_title="Cantidad de Eventos", 
-        plot_bgcolor="rgba(0,0,0,0)", 
-        paper_bgcolor="rgba(0,0,0,0)",     
-        margin=dict(l=20, r=20, t=30, b=20), 
-        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-        coloraxis_showscale=False)
-        st.plotly_chart(fig_she, use_container_width=True, key="grafica_she")
+            fig_she.update_traces(marker_pattern_shape="", cliponaxis=False)
+            fig_she.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, 
+            yaxis_title="Cantidad de Eventos", 
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)",     
+            margin=dict(l=20, r=20, t=30, b=20), 
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+            coloraxis_showscale=False)
+            st.plotly_chart(fig_she, use_container_width=True, key="grafica_she")
         
     with st.container(border=False):
         st.subheader("Vinculación Académica")
@@ -147,25 +148,25 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             st.info("Todavía no hay eventos registrados de Vinculación Académica.")
         else:
             fig_vac = px.bar(df_vac, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#95ADED", "#2563EB"])
-        fig_vac.update_traces(marker_pattern_shape="", cliponaxis=False)
-        fig_vac.update_layout(
-        xaxis={"categoryorder": "total descending", "title": ""}, 
-        yaxis_title="Cantidad de Eventos", 
-        plot_bgcolor="rgba(0,0,0,0)", 
-        paper_bgcolor="rgba(0,0,0,0)",     
-        margin=dict(l=20, r=20, t=30, b=20), 
-        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-        coloraxis_showscale=False)
-        st.plotly_chart(fig_vac, use_container_width=True, key="grafica_vac")
+            fig_vac.update_traces(marker_pattern_shape="", cliponaxis=False)
+            fig_vac.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, 
+            yaxis_title="Cantidad de Eventos", 
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)",     
+            margin=dict(l=20, r=20, t=30, b=20), 
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+            coloraxis_showscale=False)
+            st.plotly_chart(fig_vac, use_container_width=True, key="grafica_vac")
         
     with st.container(border=False):
-            st.subheader("Asociaciones Estudiantiles")
-            df_ase = eventos_por_grupo[eventos_por_grupo["Giro"] == "ASE"]
-            if df_ase.empty:
-                st.info("Todavía no hay eventos registrados de Asociaciones Estudiantiles.")
-            else:
-                fig_ase = px.bar(df_ase, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#CAB174", "#CA8A04"])
+        st.subheader("Asociaciones Estudiantiles")
+        df_ase = eventos_por_grupo[eventos_por_grupo["Giro"] == "ASE"]
+        if df_ase.empty:
+            st.info("Todavía no hay eventos registrados de Asociaciones Estudiantiles.")
+        else:
+            fig_ase = px.bar(df_ase, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#CAB174", "#CA8A04"])
             fig_ase.update_traces(marker_pattern_shape="", cliponaxis=False)
             fig_ase.update_layout(
             xaxis={"categoryorder": "total descending", "title": ""}, 
