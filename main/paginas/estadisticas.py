@@ -8,7 +8,7 @@ from reporte_pdf import reporte_pdf
 def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.title("Estadísticas")
     
-    
+    autorize_pdf = 0
     # 1. MÉTRICAS
     col1, col2, col3 = st.columns(3)
     with col1:
@@ -62,7 +62,7 @@ def seccion_reporte(eventos_por_grupo):
     cola, colb, colc = st.columns(3)
     st.subheader("Configuración de Reporte")
     if st.radio('Tipo de Reporte:', ['General','Personalizado'])== "Personalizado":
-        st.write("")
+
         with cola:  
                 st.multiselect('Seleccione el/los Giro(s)', ["Arte y Cultura","Deportivos y Recreativos","Ecología y Medio Ambiente","Liderazgo","Salud y Bienestar","Sentido Humano y E. Social","Vinculación Académica","Asociaciones Estudiantiles","FETEC"])
         with colb:
@@ -72,6 +72,7 @@ def seccion_reporte(eventos_por_grupo):
             if st.radio('Rango personalizado de fechas:', ['No','Si'])== "Si":
                 st.date_input('Fecha de Inicio', value=None, min_value=None, max_value=None, key=None)
                 st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
+                autorize_pdf = 1
     st.write("")  
     
     try:
@@ -80,14 +81,15 @@ def seccion_reporte(eventos_por_grupo):
         st.error(f"No se pudo generar el reporte: {e}")
         return
 
-    if st.download_button(
-        "Descargar reporte",
-        data=pdf,
-        file_name="Reporte_Gestion.pdf",
-        mime="application/pdf",
-        use_container_width=True,
-    ):
-        st.success("Reporte descargado con éxito!")
-        st.balloons()
+    if autorize_pdf == 1:
+        if st.download_button(
+            "Descargar reporte",
+            data=pdf,
+            file_name="Reporte_Gestion.pdf",
+            mime="application/pdf",
+            use_container_width=True,):
+            st.success("Reporte descargado con éxito!")
+            st.balloons()
+            autorize_pdf = 0
 
     
