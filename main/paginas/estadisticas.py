@@ -29,7 +29,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         )
     st.write("") 
     style_metric_cards(background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
-    st.title("Eventos por grupo", text_align="center")
+    st.title("Eventos por grupo", text_alignment="center")
     with st.container(border=False):
         st.subheader("General")
         fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
@@ -66,7 +66,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     
     with st.container(border=False):
         st.subheader("Deportivos y Recreativos")
-        df_dyr = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
+        df_dyr = eventos_por_grupo[eventos_por_grupo["Giro"] == "DYR"]
         if df_dyr.empty:
             st.info("Todavía no hay eventos registrados de Deportivos y Recreativos.")
         fig_dyr = px.bar(df_dyr, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#EA9265", "#EA580C"])
@@ -84,7 +84,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     
     with st.container(border=False):
         st.subheader("Liderazgo")
-        df_lid = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
+        df_lid = eventos_por_grupo[eventos_por_grupo["Giro"] == "LID"]
         if df_lid.empty:
             st.info("Todavía no hay eventos registrados de Liderazgo.")
         fig_lid = px.bar(df_lid, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#B799E7", "#7C3AED"])
