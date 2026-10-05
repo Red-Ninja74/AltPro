@@ -6,7 +6,7 @@ from reporte_pdf import reporte_pdf
 
 
 
-def mostrar_estadisticas_generales(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
+def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     st.title("Estadísticas")
     
     # 1. MÉTRICAS

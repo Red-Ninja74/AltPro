@@ -64,7 +64,7 @@ def main():
             total_proyectos = obtener_total_proyectos(df_eventos)
             grupo_mas_eventos = obtener_grupo_mas_eventos(df_eventos)
             eventos_por_grupo = obtener_numero_eventos_grupos(df_eventos)
-            mostrar_estadisticas_generales(total_proyectos, grupo_mas_eventos, eventos_por_grupo)
+            mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo)
 
 if __name__ == "__main__":
     main()
