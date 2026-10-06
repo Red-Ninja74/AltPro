@@ -3,11 +3,11 @@ GIROS_GRUPOS = {
     "Arte y Cultura": ["ART AT TEC", "BLOOM CRAFT STUDIO", "CINEPHORIA"],
     "Deportivos y Recreativos": ["COURT CLUB", "MONKLIMB"],
     "Ecología y Medio Ambiente": ["GREEN CREW"],
-    "Liderazgo": ["ALMA", "CARNERO", "KREI", "LASOS", "LEADER HUB", "NOVA", "REVO", "START A NEW LIFE"],
+    "Liderazgo": ["ALMA", "CARNERO", "LASOS", "LEADER HUB", "NOVA", "START A NEW LIFE"],
     "Salud y Bienestar": ["BECOMING", "CLOUD", "ZENIT"],
     "Sentido Humano y E. Social": ["CLICKED", "CORAZÓN EN ACCIÓN", "ORIX", "VOLUNTAD COMPARTIDA"],
     "Vinculación Académica": ["BEETRONIX", "KEYBOT", "NÉBULA", "NEHS", "STEAM", "TOASTMASTERS", "TEC RACING", "VOICES"],
-    "Asociaciones Estudiantiles": ["SEAAD", "SEART", "SECSG", "SEING", "SELAET", "SELCPF", "SENEG"],
+    "Asociaciones Estudiantiles": ["SEAAD", "SEART", "SECSG", "SEING", "SELAET", "SELCPF", "SENEG", "KREI", "REVO"],
     "FETEC": ["CVIG", "CRS", "CPE", "SEPREPA", "TRIBUNAL", "COMITÉ EJECUTIVO"]
 }
 
@@ -31,11 +31,9 @@ CATALOGO_IDS = {
     # 🚀 Liderazgo
     "ALMA": "HID-LID-ALM",
     "CARNERO": "HID-LID-CRN",
-    "KREI": "HID-LID-KRE",
     "LASOS": "HID-LID-LAS",
     "LEADER HUB": "HID-LID-LHB",
     "NOVA": "HID-LID-NOV",
-    "REVO": "HID-LID-RVO",
     "START A NEW LIFE": "HID-LID-SNL",
 
     # 🧘 Salud y Bienestar
@@ -69,6 +67,8 @@ CATALOGO_IDS = {
     "SELAET": "HID-ASE-LAE",
     "SELCPF": "HID-ASE-CPF",
     "SENEG": "HID-ASE-NEG",
+    "KREI": "HID-ASE-KRE",
+    "REVO": "HID-ASE-RVO",
 
     # 🔵 FETEC
     "CVIG": "HID-FTC-VIG",
