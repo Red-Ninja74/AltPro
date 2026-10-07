@@ -263,7 +263,7 @@ def seccion_reporte(eventos_por_grupo):
         ids_filtrados = [CATALOGO_IDS[grupo] for grupo in grupos_seleccionados if grupo in CATALOGO_IDS]
         st.info(f"📌 **IDs a filtrar en la base de datos:** {ids_filtrados}")
         st.write("")
-        datos_reporte = eventos_por_grupo[eventos_por_grupo["ID"].isin(grupos_seleccionados)]
+        datos_reporte = eventos_por_grupo[eventos_por_grupo["ID"].isin(ids_filtrados)]
     st.write(datos_reporte)
     
     try:
