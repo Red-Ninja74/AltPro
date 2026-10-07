@@ -263,7 +263,7 @@ def seccion_reporte(eventos_por_grupo):
 #      st.write("")
     
     try:
-        pdf = reporte_pdf(eventos_por_grupo, giros_seleccionados, grupos_seleccionados).crear_reporte()
+        pdf = reporte_pdf(eventos_por_grupo).crear_reporte()
     except Exception as e:
         st.error(f"No se pudo generar el reporte: {e}")
         return
