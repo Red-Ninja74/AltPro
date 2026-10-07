@@ -264,7 +264,6 @@ def seccion_reporte(eventos_por_grupo):
         st.info(f"📌 **IDs a filtrar en la base de datos:** {ids_filtrados}")
         st.write("")
         datos_reporte = eventos_por_grupo[eventos_por_grupo["ID"].isin(ids_filtrados)]
-    st.write(datos_reporte)
     
     try:
         pdf = reporte_pdf(datos_reporte).crear_reporte()
