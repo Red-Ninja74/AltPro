@@ -230,11 +230,13 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
 def seccion_reporte(eventos_por_grupo):
     # El PDF se arma con los datos ya cargados en la página (tarda
     # centésimas de segundo) y el botón solo lo descarga
-    
+    ids_filtrados = []
     st.subheader("Configuración de Reporte")
     tipo_reporte = st.radio('Tipo de Reporte:', ['General', 'Personalizado'])
     
-    if tipo_reporte == "Personalizado":
+    if tipo_reporte == "General":
+        datos_reporte = eventos_por_grupo
+    elif tipo_reporte == "Personalizado":
         cola, colb, colc = st.columns(3)
         with cola:  
             giros_seleccionados = st.multiselect('Seleccione el/los Giro(s)', options=list(GIROS_GRUPOS.keys()))
@@ -260,10 +262,12 @@ def seccion_reporte(eventos_por_grupo):
                 st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
         ids_filtrados = [CATALOGO_IDS[grupo] for grupo in grupos_seleccionados if grupo in CATALOGO_IDS]
         st.info(f"📌 **IDs a filtrar en la base de datos:** {ids_filtrados}")
-#      st.write("")
+        st.write("")
+        datos_reporte = eventos_por_grupo[eventos_por_grupo["ID"].isin(grupos_seleccionados)]
+    st.write(datos_reporte)
     
     try:
-        pdf = reporte_pdf(eventos_por_grupo).crear_reporte()
+        pdf = reporte_pdf(datos_reporte).crear_reporte()
     except Exception as e:
         st.error(f"No se pudo generar el reporte: {e}")
         return
