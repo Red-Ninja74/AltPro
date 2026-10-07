@@ -260,10 +260,10 @@ def seccion_reporte(eventos_por_grupo):
                 st.date_input('Fecha de Fin', value=None, min_value=None, max_value=None, key=None)
         ids_filtrados = [CATALOGO_IDS[grupo] for grupo in grupos_seleccionados if grupo in CATALOGO_IDS]
         st.info(f"📌 **IDs a filtrar en la base de datos:** {ids_filtrados}")
-        st.write("")
+#      st.write("")
     
     try:
-        pdf = reporte_pdf(eventos_por_grupo).crear_reporte()
+        pdf = reporte_pdf(eventos_por_grupo, giros_seleccionados, grupos_seleccionados).crear_reporte()
     except Exception as e:
         st.error(f"No se pudo generar el reporte: {e}")
         return
