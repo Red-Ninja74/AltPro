@@ -29,200 +29,214 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         )
     st.write("") 
     style_metric_cards(background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
-    st.title("Eventos por grupo", text_alignment="center")
-    with st.container(border=False):
-        st.subheader("General")
-        fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
-        fig.update_traces(marker_pattern_shape="", cliponaxis=False)
-        fig.update_layout(
-        xaxis={"categoryorder": "total descending", "title": ""}, 
-        yaxis_title="Cantidad de Eventos", 
-        plot_bgcolor="rgba(0,0,0,0)", 
-        paper_bgcolor="rgba(0,0,0,0)",     
-        margin=dict(l=20, r=20, t=30, b=20), 
-        font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-        yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-        coloraxis_showscale=False
-    )
-    st.plotly_chart(fig, use_container_width=True, key="grafica_general")
     
-    cold, cole  = st.columns(2)
-    
-    with cold:
+    taba, tabb, tabc, tabd = st.tabs([
+                "Eventos por Grupo y Giro",
+                "Eventos por mes",
+                "Asistencia por Grupo",
+                "Lugares más populares",
+            ])
+    with taba:
         with st.container(border=False):
-            st.subheader("Arte y Cultura")
-            df_ayc = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
-            if df_ayc.empty:
-                st.info("Todavía no hay eventos registrados de Arte y Cultura.")
-            else:
-                fig_ayc = px.bar(df_ayc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DB6193", "#DB2777"])
-                fig_ayc.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_ayc.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_ayc, use_container_width=True, key="grafica_ayc")
-            
-        with st.container(border=False):
-            st.subheader("Ecología y Medio Ambiente")
-            df_ema = eventos_por_grupo[eventos_por_grupo["Giro"] == "EMA"]
-            if df_ema.empty:
-                st.info("Todavía no hay eventos registrados de Ecología y Medio Ambiente.")
-            else:
-                fig_ema = px.bar(df_ema, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#469D63", "#16A34A"])
-                fig_ema.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_ema.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_ema, use_container_width=True, key="grafica_ema")
+            st.subheader("General")
+            fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
+            fig.update_traces(marker_pattern_shape="", cliponaxis=False)
+            fig.update_layout(
+            xaxis={"categoryorder": "total descending", "title": ""}, 
+            yaxis_title="Cantidad de Eventos", 
+            plot_bgcolor="rgba(0,0,0,0)", 
+            paper_bgcolor="rgba(0,0,0,0)",     
+            margin=dict(l=20, r=20, t=30, b=20), 
+            font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+            yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+            coloraxis_showscale=False
+        )
+        st.plotly_chart(fig, use_container_width=True, key="grafica_general")
         
-        with st.container(border=False):
-            st.subheader("Salud y Bienestar")
-            df_syb = eventos_por_grupo[eventos_por_grupo["Giro"] == "SYB"]
-            if df_syb.empty:
-                st.info("Todavía no hay eventos registrados de Salud y Bienestar.")
-            else:
-                fig_syb = px.bar(df_syb, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#FBBF24", "#F59E0B"])
-                fig_syb.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_syb.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_syb, use_container_width=True, key="grafica_syb")
-    
-        with st.container(border=False):
-            st.subheader("Vinculación Académica")
-            df_vac = eventos_por_grupo[eventos_por_grupo["Giro"] == "VAC"]
-            if df_vac.empty:
-                st.info("Todavía no hay eventos registrados de Vinculación Académica.")
-            else:
-                fig_vac = px.bar(df_vac, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#95ADED", "#2563EB"])
-                fig_vac.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_vac.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_vac, use_container_width=True, key="grafica_vac")
-            
-        with st.container(border=False):
-            st.subheader("FETEC")
-            df_ftc = eventos_por_grupo[eventos_por_grupo["Giro"] == "FTC"]
-            if df_ftc.empty:
-                st.info("Todavía no hay eventos registrados de FETEC.")
-            else:
-                fig_ftc = px.bar(df_ftc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#4E5E8A", "#1E3A8A"])
-                fig_ftc.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_ftc.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_ftc, use_container_width=True, key="grafica_ftc")
+        cold, cole  = st.columns(2)
         
-    with cole:
-        with st.container(border=False):
-            st.subheader("Deportivos y Recreativos")
-            df_dyr = eventos_por_grupo[eventos_por_grupo["Giro"] == "DYR"]
-            if df_dyr.empty:
-                st.info("Todavía no hay eventos registrados de Deportivos y Recreativos.")
-            else:
-                fig_dyr = px.bar(df_dyr, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#EA9265", "#EA580C"])
-                fig_dyr.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_dyr.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_dyr, use_container_width=True, key="grafica_dyr")
-        
-        with st.container(border=False):
-            st.subheader("Liderazgo")
-            df_lid = eventos_por_grupo[eventos_por_grupo["Giro"] == "LID"]
-            if df_lid.empty:
-                st.info("Todavía no hay eventos registrados de Liderazgo.")
-            else:
-                fig_lid = px.bar(df_lid, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#B799E7", "#7C3AED"])
-                fig_lid.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_lid.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_lid, use_container_width=True, key="grafica_lid")
-        
-        with st.container(border=False):
-            st.subheader("Sentido Humano y E. Social")
-            df_she = eventos_por_grupo[eventos_por_grupo["Giro"] == "SHE"]
-            if df_she.empty:
-                st.info("Todavía no hay eventos registrados de Sentido Humano y E. Social.")
-            else:
-                fig_she = px.bar(df_she, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DC7E7E", "#DC2626"])
-                fig_she.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_she.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_she, use_container_width=True, key="grafica_she")
+        with cold:
+            with st.container(border=False):
+                st.subheader("Arte y Cultura")
+                df_ayc = eventos_por_grupo[eventos_por_grupo["Giro"] == "ACE"]
+                if df_ayc.empty:
+                    st.info("Todavía no hay eventos registrados de Arte y Cultura.")
+                else:
+                    fig_ayc = px.bar(df_ayc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DB6193", "#DB2777"])
+                    fig_ayc.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_ayc.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_ayc, use_container_width=True, key="grafica_ayc")
                 
-        with st.container(border=False):
-            st.subheader("Asociaciones Estudiantiles")
-            df_ase = eventos_por_grupo[eventos_por_grupo["Giro"] == "ASE"]
-            if df_ase.empty:
-                st.info("Todavía no hay eventos registrados de Asociaciones Estudiantiles.")
-            else:
-                fig_ase = px.bar(df_ase, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#CAB174", "#CA8A04"])
-                fig_ase.update_traces(marker_pattern_shape="", cliponaxis=False)
-                fig_ase.update_layout(
-                xaxis={"categoryorder": "total descending", "title": ""}, 
-                yaxis_title="Cantidad de Eventos", 
-                plot_bgcolor="rgba(0,0,0,0)", 
-                paper_bgcolor="rgba(0,0,0,0)",     
-                margin=dict(l=20, r=20, t=30, b=20), 
-                font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
-                yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
-                coloraxis_showscale=False)
-                st.plotly_chart(fig_ase, use_container_width=True, key="grafica_ase")
-    seccion_reporte(eventos_por_grupo)
-    
-    
+            with st.container(border=False):
+                st.subheader("Ecología y Medio Ambiente")
+                df_ema = eventos_por_grupo[eventos_por_grupo["Giro"] == "EMA"]
+                if df_ema.empty:
+                    st.info("Todavía no hay eventos registrados de Ecología y Medio Ambiente.")
+                else:
+                    fig_ema = px.bar(df_ema, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#469D63", "#16A34A"])
+                    fig_ema.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_ema.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_ema, use_container_width=True, key="grafica_ema")
+            
+            with st.container(border=False):
+                st.subheader("Salud y Bienestar")
+                df_syb = eventos_por_grupo[eventos_por_grupo["Giro"] == "SYB"]
+                if df_syb.empty:
+                    st.info("Todavía no hay eventos registrados de Salud y Bienestar.")
+                else:
+                    fig_syb = px.bar(df_syb, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#FBBF24", "#F59E0B"])
+                    fig_syb.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_syb.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_syb, use_container_width=True, key="grafica_syb")
+        
+            with st.container(border=False):
+                st.subheader("Vinculación Académica")
+                df_vac = eventos_por_grupo[eventos_por_grupo["Giro"] == "VAC"]
+                if df_vac.empty:
+                    st.info("Todavía no hay eventos registrados de Vinculación Académica.")
+                else:
+                    fig_vac = px.bar(df_vac, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#95ADED", "#2563EB"])
+                    fig_vac.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_vac.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_vac, use_container_width=True, key="grafica_vac")
+                
+            with st.container(border=False):
+                st.subheader("FETEC")
+                df_ftc = eventos_por_grupo[eventos_por_grupo["Giro"] == "FTC"]
+                if df_ftc.empty:
+                    st.info("Todavía no hay eventos registrados de FETEC.")
+                else:
+                    fig_ftc = px.bar(df_ftc, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#4E5E8A", "#1E3A8A"])
+                    fig_ftc.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_ftc.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_ftc, use_container_width=True, key="grafica_ftc")
+            
+        with cole:
+            with st.container(border=False):
+                st.subheader("Deportivos y Recreativos")
+                df_dyr = eventos_por_grupo[eventos_por_grupo["Giro"] == "DYR"]
+                if df_dyr.empty:
+                    st.info("Todavía no hay eventos registrados de Deportivos y Recreativos.")
+                else:
+                    fig_dyr = px.bar(df_dyr, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#EA9265", "#EA580C"])
+                    fig_dyr.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_dyr.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_dyr, use_container_width=True, key="grafica_dyr")
+            
+            with st.container(border=False):
+                st.subheader("Liderazgo")
+                df_lid = eventos_por_grupo[eventos_por_grupo["Giro"] == "LID"]
+                if df_lid.empty:
+                    st.info("Todavía no hay eventos registrados de Liderazgo.")
+                else:
+                    fig_lid = px.bar(df_lid, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#B799E7", "#7C3AED"])
+                    fig_lid.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_lid.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_lid, use_container_width=True, key="grafica_lid")
+            
+            with st.container(border=False):
+                st.subheader("Sentido Humano y E. Social")
+                df_she = eventos_por_grupo[eventos_por_grupo["Giro"] == "SHE"]
+                if df_she.empty:
+                    st.info("Todavía no hay eventos registrados de Sentido Humano y E. Social.")
+                else:
+                    fig_she = px.bar(df_she, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#DC7E7E", "#DC2626"])
+                    fig_she.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_she.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_she, use_container_width=True, key="grafica_she")
+                    
+            with st.container(border=False):
+                st.subheader("Asociaciones Estudiantiles")
+                df_ase = eventos_por_grupo[eventos_por_grupo["Giro"] == "ASE"]
+                if df_ase.empty:
+                    st.info("Todavía no hay eventos registrados de Asociaciones Estudiantiles.")
+                else:
+                    fig_ase = px.bar(df_ase, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#CAB174", "#CA8A04"])
+                    fig_ase.update_traces(marker_pattern_shape="", cliponaxis=False)
+                    fig_ase.update_layout(
+                    xaxis={"categoryorder": "total descending", "title": ""}, 
+                    yaxis_title="Cantidad de Eventos", 
+                    plot_bgcolor="rgba(0,0,0,0)", 
+                    paper_bgcolor="rgba(0,0,0,0)",     
+                    margin=dict(l=20, r=20, t=30, b=20), 
+                    font=dict(family="Inter, sans-serif", size=13, color="#64748B"), 
+                    yaxis=dict(showgrid=True, gridcolor="#F1F5F9", zeroline=False),
+                    coloraxis_showscale=False)
+                    st.plotly_chart(fig_ase, use_container_width=True, key="grafica_ase")
+        seccion_reporte(eventos_por_grupo)
+    with tabb:
+        st.subheader("Eventos por mes")
+        st.info("En desarrollo...")
+    with tabc:
+        st.subheader("Asistencia por Grupo")
+        st.info("En desarrollo...")
+    with tabd:
+        st.subheader("Lugares más populares")
+        st.info("En desarrollo...")
     
 # Con @st.fragment, al cambiar las opciones del reporte solo se vuelve a
 # ejecutar esta sección y no toda la app (no se vuelve a leer la hoja)
