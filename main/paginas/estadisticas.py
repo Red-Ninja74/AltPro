@@ -30,6 +30,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         )
     st.write("") 
     style_metric_cards(background_color="#F8FAFC",border_size_px=1,border_color="#E2E8F0",border_radius_px=12,border_left_color="#2563EB", box_shadow=True)
+    st.pills("Tags", ["Sports", "Politics"])
     
     taba, tabb, tabc, tabd = st.tabs([
                 "Eventos por Grupo y Giro",
