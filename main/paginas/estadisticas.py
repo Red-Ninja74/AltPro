@@ -24,7 +24,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
     with col3:
         st.metric(
             label="Promedio por Grupo", 
-            value=f"{len(eventos_por_grupo)/42}", 
+            value=f"{len(eventos_por_grupo)/42:.2f}", 
             delta="Proyectos por Grupo hasta la fecha"
         )
     st.write("") 
