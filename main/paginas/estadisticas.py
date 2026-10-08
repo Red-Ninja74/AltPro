@@ -25,7 +25,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
         st.metric(
             label="Promedio por Grupo", 
             value=f"{total_proyectos/eventos_por_grupo['Grupo'].nunique():.2f}", 
-            delta="Proyectos por Grupo hasta la fecha\n(Solo Grupos con eventos registrados)", 
+            delta="Proyectos por Grupo hasta la fecha \n(Solo Grupos con eventos registrados)", 
             delta_color="normal"
         )
     st.write("") 
