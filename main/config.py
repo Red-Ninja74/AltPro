@@ -19,8 +19,8 @@ GIROS_GRUPOS_min = {
     "Salud y Bienestar": ["Becoming", "CLOUD", "Zenit"],
     "Sentido Humano y E. Social": ["CLICKED", "CORAZÓN EN ACCIÓN", "ORIX", "VOLUNTAD COMPARTIDA"],
     "Vinculación Académica": ["Beetronix", "Keybot", "Nébula", "NEHS", "Steam", "TOASTMASTERS", "Tec Racing", "Voices"],
-    "Asociaciones Estudiantiles": ["SEAAD", "SEART", "SECSG", "SEING", "SELAET", "SELCPF", "SENEG", "KREI", "REVO"],
-    "FETEC": ["CVIG", "CRS", "CPE", "SEPREPA", "TRIBUNAL", "COMITÉ EJECUTIVO"]
+    "Asociaciones Estudiantiles": ["SEAAD", "SEART", "SECSG", "SEING", "SELAET", "SELCPF", "SENEG", "Krei", "Revo"],
+    "FETEC": ["CVIG", "CRS", "CPE", "SEPREPA", "Tribunal", "Comité Ejecutivo"]
 }
 
 # ==========================================

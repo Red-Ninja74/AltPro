@@ -39,7 +39,7 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
             ])
     with taba:
         colores_personalizados = {}
-        for giro, grupos in GIROS_GRUPOS.items():
+        for giro, grupos in GIROS_GRUPOS_min.items():
             color_giro = COLORES_POR_GIRO.get(giro, "#64748B")
             for grupo in grupos:
                 colores_personalizados[grupo] = color_giro
