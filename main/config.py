@@ -11,6 +11,17 @@ GIROS_GRUPOS = {
     "FETEC": ["CVIG", "CRS", "CPE", "SEPREPA", "TRIBUNAL", "COMITÉ EJECUTIVO"]
 }
 
+GIROS_GRUPOS_min = {
+    "Arte y Cultura":  ["Art at Tec", "Bloom Craft Studio", "Cinephoria"],
+    "Deportivos y Recreativos": ["Court Club", "Monklimb"],
+    "Ecología y Medio Ambiente":  ["Green Crew"],
+    "Liderazgo": ["ALMA", "Carnero", "LASOS", "Leader Hub", "NOVA", "Start a New Life"],
+    "Salud y Bienestar": ["Becoming", "CLOUD", "Zenit"],
+    "Sentido Humano y E. Social": ["CLICKED", "CORAZÓN EN ACCIÓN", "ORIX", "VOLUNTAD COMPARTIDA"],
+    "Vinculación Académica": ["Beetronix", "Keybot", "Nébula", "NEHS", "Steam", "TOASTMASTERS", "Tec Racing", "Voices"],
+    "Asociaciones Estudiantiles": ["SEAAD", "SEART", "SECSG", "SEING", "SELAET", "SELCPF", "SENEG", "KREI", "REVO"],
+    "FETEC": ["CVIG", "CRS", "CPE", "SEPREPA", "TRIBUNAL", "COMITÉ EJECUTIVO"]
+}
 
 # ==========================================
 # CATÁLOGO DE IDs POR GRUPO ESTUDIANTIL
@@ -112,3 +123,15 @@ COLORES_CATEGORIA = {
     "ASE": "#CA8A04",  # Asociaciones Estudiantiles
     "FTC": "#1E3A8A",  # FETEC
 }
+
+COLORES_POR_GIRO = {
+        "Asociaciones Estudiantiles": "#CA8A04",
+        "Arte y Cultura": "#DB2777",
+        "Deportivos y Recreativos": "#EA580C",
+        "Ecología y Medio Ambiente": "#16A34A",
+        "Liderazgo": "#7C3AED",
+        "Salud y Bienestar": "#0D9488",
+        "Sentido Humano y E. Social": "#DC2626",
+        "Vinculación Académica": "#2563EB",
+        "FETEC": "#1E3A8A",
+    }

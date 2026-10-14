@@ -1,7 +1,7 @@
 import plotly.express as px
 import streamlit as st
 from streamlit_extras.metric_cards import style_metric_cards
-from config import CATALOGO_IDS, GIROS_GRUPOS
+from config import CATALOGO_IDS, GIROS_GRUPOS, COLORES_POR_GIRO, GIROS_GRUPOS_min
 from reporte_pdf import reporte_pdf
 
 
@@ -38,9 +38,14 @@ def mostrar_estadisticas(total_proyectos, grupo_mas_eventos, eventos_por_grupo):
                 "Lugares más populares",
             ])
     with taba:
+        colores_personalizados = {}
+        for giro, grupos in GIROS_GRUPOS_min.items():
+            color_giro = COLORES_POR_GIRO.get(giro, "#64748B")
+            for grupo in grupos:
+                colores_personalizados[grupo] = color_giro
         with st.container(border=False):
             st.subheader("General")
-            fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Eventos", color_continuous_scale=["#93C5FD", "#1E3A8A"])
+            fig = px.bar(eventos_por_grupo, x="Grupo", y="Eventos", color="Grupo", color_discrete_map=colores_personalizados)
             fig.update_traces(marker_pattern_shape="", cliponaxis=False)
             fig.update_layout(
             xaxis={"categoryorder": "total descending", "title": ""}, 
